@@ -1,0 +1,44 @@
+#
+# Description
+# -----------
+# This table stores links to external information related to artist profiles. 
+# These links can be organized by link type to show Videos, Audio etc.
+#
+# Fields
+# ------
+# id:                   The id for each link.
+# uuid:                 The Universal Unique ID.
+# business_id:          The business the link is attached to.
+#
+# artist_id:            The ID of the artist profile the link is for.
+# 
+# link_type:            The type of link.
+#
+#                       1000 - Link to webpage.
+#                       2000 - Video, youtube
+#                       2001 - Video, vimeo
+#                       3000 - Audio, soundcloud **future**
+#
+# name:                 The name for the link.
+# url:                  The url for the link.
+#
+# description:          The description of the link to be used in the list of links.
+#
+# date_added:           The UTC date and time the record was added.
+# last_updated:         The UTC date and time the record was last updated.
+#
+create table ciniki_artistprofiles_links (
+    id int not null auto_increment,
+    uuid char(36) not null,
+    business_id int not null,
+    artist_id int not null,
+    name varchar(150) not null,
+    link_type smallint unsigned not null,
+    url varchar(255) not null,
+    description varchar(6000) not null,
+    date_added datetime not null,
+    last_updated datetime not null,
+    primary key (id),
+    unique index (business_id, artist_id, url),
+    index sync (business_id, uuid, last_updated)
+) ENGINE='InnoDB', COMMENT='v1.01';
