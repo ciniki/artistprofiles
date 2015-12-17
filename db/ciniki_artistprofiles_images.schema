@@ -48,5 +48,6 @@ create table ciniki_artistprofiles_images (
     date_added datetime not null,
     last_updated datetime not null,
     primary key (id),
+    unique index (artist_id, image_id),
     index sync (business_id, uuid, last_updated)
 ) ENGINE='InnoDB', COMMENT='v1.01';

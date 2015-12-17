@@ -14,6 +14,8 @@ function ciniki_artistprofiles_objects($ciniki) {
     $objects = array();
     $objects['artist'] = array(
         'name'=>'Artist',
+        'o_name'=>'artist',
+        'o_container'=>'artists',
         'sync'=>'yes',
         'table'=>'ciniki_artistprofiles',
         'fields'=>array(
@@ -24,14 +26,16 @@ function ciniki_artistprofiles_objects($ciniki) {
             'flags'=>array('name'=>'Options'),
             'primary_image_id'=>array('name'=>'Primary Image', 'ref'=>'ciniki.images.image', 'default'=>'0'),
             'synopsis'=>array('name'=>'Synopsis', 'default'=>''),
-            'description'=>array('description'=>'Description', 'default'=>''),
+            'description'=>array('name'=>'Description', 'default'=>''),
             'setup_image_id'=>array('name'=>'Setup Image', 'ref'=>'ciniki.images.image', 'default'=>'0'),
-            'setup_description'=>array('description'=>'Description', 'default'=>''),
+            'setup_description'=>array('name'=>'Description', 'default'=>''),
             ),
         'history_table'=>'ciniki_artistprofiles_history',
         );
     $objects['audio'] = array(
         'name'=>'Audio',
+        'o_name'=>'audio',
+        'o_container'=>'audio',
         'sync'=>'yes',
         'table'=>'ciniki_artistprofiles_audio',
         'fields'=>array(
@@ -43,12 +47,14 @@ function ciniki_artistprofiles_objects($ciniki) {
             'mp3_audio_id'=>array('name'=>'MP3', 'default'=>'0'),
             'wav_audio_id'=>array('name'=>'WAV', 'default'=>'0'),
             'ogg_audio_id'=>array('name'=>'OGG', 'default'=>'0'),
-            'description'=>array('name'=>'Description'),
+            'description'=>array('name'=>'Description', 'default'=>''),
             ),
         'history_table'=>'ciniki_artistprofiles_history',
         );
     $objects['image'] = array(
         'name'=>'Image',
+        'o_name'=>'image',
+        'o_container'=>'images',
         'sync'=>'yes',
         'table'=>'ciniki_artistprofiles_images',
         'fields'=>array(
@@ -63,6 +69,8 @@ function ciniki_artistprofiles_objects($ciniki) {
         );
     $objects['link'] = array(
         'name'=>'Link',
+        'o_name'=>'link',
+        'o_container'=>'links',
         'sync'=>'yes',
         'table'=>'ciniki_artistprofiles_links',
         'fields'=>array(
@@ -76,6 +84,8 @@ function ciniki_artistprofiles_objects($ciniki) {
         );
     $objects['tag'] = array(
         'name'=>'Tag',
+        'o_name'=>'tag',
+        'o_container'=>'tags',
         'sync'=>'yes',
         'table'=>'ciniki_artistprofiles_tags',
         'fields'=>array(

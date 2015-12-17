@@ -21,6 +21,7 @@ function ciniki_artistprofiles_dropboxDownloadLinks(&$ciniki, $business_id, $cli
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dropboxOpenWebloc');
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'objectAdd');
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'objectUpdate');
+    ciniki_core_loadMethod($ciniki, 'ciniki', 'artistprofiles', 'private', 'linkType');
 
     foreach($details as $link) {
         $name = '';
@@ -41,11 +42,11 @@ function ciniki_artistprofiles_dropboxDownloadLinks(&$ciniki, $business_id, $cli
             $found_link = null;
             
             $link_type = 1000;
-            if( preg_match('/youtube.com/', $url) ) {
-                $link_type = 2000;
-            } elseif( preg_match('/vimeo.com/', $url) ) {
-                $link_type = 2001;
+            $rc = ciniki_artistprofiles_linkType($ciniki, $business_id, $url);
+            if( $rc['stat'] != 'ok' ) {
+                return $rc;
             }
+            $link_type = $rc['link_type'];
 
             foreach($artist['links'] as $artist_link) {
                 if( $artist_link['url'] == $url && $artist_link['link_type'] == $link_type ) {

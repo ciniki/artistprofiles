@@ -24,7 +24,6 @@ function ciniki_artistprofiles_dropboxDownloadImages(&$ciniki, $business_id, $cl
 
 
     foreach($details as $img) {
-        print_r($img);
         $flags = 0x01;  // Visible on website
         if( $img['mime_type'] == 'image/jpeg' ) {
             $rc = ciniki_images_insertFromDropbox($ciniki, $business_id, $ciniki['session']['user']['id'], $client, $img['path'], 1, '', '', 'no');
@@ -32,8 +31,9 @@ function ciniki_artistprofiles_dropboxDownloadImages(&$ciniki, $business_id, $cl
                 return $rc;
             }
             $found = 'no';
-            if( isset($ciniki_artist['images']) ) {
-                foreach($ciniki_artist['images'] as $artist_img) {
+            if( isset($artist['images']) ) {
+                foreach($artist['images'] as $artist_img) {
+                    print_r($artist_img);
                     if( $artist_img['image_id'] == $rc['id'] ) {
                         $found = 'yes';
                         break;
