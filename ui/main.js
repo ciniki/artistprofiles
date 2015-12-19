@@ -52,7 +52,7 @@ function ciniki_artistprofiles_main() {
             '_image':{'label':'', 'aside':'yes', 'type':'imageform', 'fields':{
                 'primary_image_id':{'label':'', 'type':'image_id', 'hidelabel':'yes', 'history':'no'},
             }},
-			'_caption':{'label':'', 'aside':'yes', 'list':{
+			'_caption':{'label':'', 'aside':'yes', 'visible':function() {return M.ciniki_artistprofiles_main.artist.data.primary_image_caption!=''?'yes':'no';}, 'list':{
 				'primary_image_caption':{'label':'Caption', 'type':'text'},
 				}},
 			'info':{'label':'Service', 'aside':'yes', 'list':{
@@ -89,6 +89,7 @@ function ciniki_artistprofiles_main() {
 		};
 		this.artist.sectionData = function(s) {
             if( s == 'info' || s == '_caption' ) { return this.sections[s].list; }
+            if( s == 'synopsis' || s == 'description' ) { return this.data[s].replace(/\n/g, '<br/>'); }
 			return this.data[s];
 		};
         this.artist.noData = function(s) {
