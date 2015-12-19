@@ -52,6 +52,9 @@ function ciniki_artistprofiles_main() {
             '_image':{'label':'', 'aside':'yes', 'type':'imageform', 'fields':{
                 'primary_image_id':{'label':'', 'type':'image_id', 'hidelabel':'yes', 'history':'no'},
             }},
+			'_caption':{'label':'', 'aside':'yes', 'list':{
+				'primary_image_caption':{'label':'Caption', 'type':'text'},
+				}},
 			'info':{'label':'Service', 'aside':'yes', 'list':{
 				'name':{'label':'Name'},
 				'status_text':{'label':'Status'},
@@ -85,7 +88,7 @@ function ciniki_artistprofiles_main() {
                 }},
 		};
 		this.artist.sectionData = function(s) {
-            if( s == 'info' ) { return this.sections[s].list; }
+            if( s == 'info' || s == '_caption' ) { return this.sections[s].list; }
 			return this.data[s];
 		};
         this.artist.noData = function(s) {
@@ -129,6 +132,9 @@ function ciniki_artistprofiles_main() {
         this.edit.sections = { 
 			'_image':{'label':'Image', 'type':'imageform', 'aside':'yes', 'fields':{
                 'primary_image_id':{'label':'', 'type':'image_id', 'hidelabel':'yes', 'controls':'all', 'history':'no'},
+				}},
+			'_caption':{'label':'', 'aside':'yes', 'fields':{
+				'primary_image_caption':{'label':'Caption', 'type':'text'},
 				}},
             'general':{'label':'Service', 'aside':'yes', 'fields':{
                 'name':{'label':'Name', 'type':'text'},

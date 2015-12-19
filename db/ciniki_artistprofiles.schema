@@ -27,11 +27,13 @@
 #                       0x08 - 
 #
 # primary_image_id:     The ID of the image to show in listings and top of artist page.
+# primary_image_caption:    The caption for the primary image.
 #
 # synopsis:             The short bio or introduction of the artist.
 # description:          The longer biography of the artist (optional).
 #
 # setup_image_id:       The ID of the image for the kit setup.
+# setup_image_caption:    The caption for the setup image.
 # setup_description:    The description of the setup.
 #
 # date_added:           The UTC date and time the record was added.
@@ -47,9 +49,11 @@ create table ciniki_artistprofiles (
     status tinyint unsigned not null,
     flags tinyint unsigned not null,
     primary_image_id int not null,
+    primary_image_caption varchar(250) not null,
     synopsis varchar(2000) not null,
     description varchar(20000) not null,
     setup_image_id int not null,
+    setup_image_caption varchar(250) not null,
     setup_description varchar(10000) not null,
     date_added datetime not null,
     last_updated datetime not null,

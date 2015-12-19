@@ -27,9 +27,11 @@ function ciniki_artistprofiles_artistAdd(&$ciniki) {
         'status'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Status'),
         'flags'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Options'),
         'primary_image_id'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Primary Image'),
+        'primary_image_caption'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Primary Image Caption'),
         'synopsis'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Synopsis'),
         'description'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Description'),
         'setup_image_id'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Setup Image'),
+        'setup_image_caption'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Setup Image Caption'),
         'setup_description'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Description'),
 		'categories'=>array('required'=>'no', 'blank'=>'yes', 'type'=>'list', 'delimiter'=>'::', 'name'=>'Categories'),
         ));

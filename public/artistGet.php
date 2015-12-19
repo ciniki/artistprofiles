@@ -79,9 +79,11 @@ function ciniki_artistprofiles_artistGet($ciniki) {
             'status'=>'',
             'flags'=>'',
             'primary_image_id'=>'0',
+            'primary_image_caption'=>'',
             'synopsis'=>'',
             'description'=>'',
             'setup_image_id'=>'0',
+            'setup_image_caption'=>'',
             'setup_description'=>'',
         );
     }
@@ -99,9 +101,11 @@ function ciniki_artistprofiles_artistGet($ciniki) {
             . "ciniki_artistprofiles.flags, "
             . "ciniki_artistprofiles.flags AS flags_text, "
             . "ciniki_artistprofiles.primary_image_id, "
+            . "ciniki_artistprofiles.primary_image_caption, "
             . "ciniki_artistprofiles.synopsis, "
             . "ciniki_artistprofiles.description, "
             . "ciniki_artistprofiles.setup_image_id, "
+            . "ciniki_artistprofiles.setup_image_caption, "
             . "ciniki_artistprofiles.setup_description "
             . "FROM ciniki_artistprofiles "
             . "WHERE ciniki_artistprofiles.business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
@@ -111,8 +115,8 @@ function ciniki_artistprofiles_artistGet($ciniki) {
         $rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.artistprofiles', array(
             array('container'=>'artists', 'fname'=>'id', 'name'=>'artist',
                 'fields'=>array('id', 'name', 'sort_name', 'permalink', 'status', 'status_text',
-                    'flags', 'flags_text', 'primary_image_id', 'synopsis', 'description',
-                    'setup_image_id', 'setup_description'),
+                    'flags', 'flags_text', 'primary_image_id', 'primary_image_caption', 'synopsis', 'description',
+                    'setup_image_id', 'setup_image_caption', 'setup_description'),
                  'maps'=>array('status_text'=>$maps['artist']['status']),
                  'flags'=>array('flags_text'=>$maps['artist']['flags']),
                  ),
