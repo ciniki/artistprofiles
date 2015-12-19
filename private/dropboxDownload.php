@@ -66,8 +66,14 @@ function ciniki_artistprofiles_dropboxDownload(&$ciniki, $business_id) {
         $dropbox_cursor = $rc['settings']['dropbox-cursor'];
     }
 
-    // FIXME: Remove debug
-    $dropbox_cursor = null;
+    //
+    // Check if we should ignore the old cursor and start from scratch
+    //
+    if( isset($ciniki['config']['ciniki.artistprofiles']['ignore.cursor']) 
+        && ($ciniki['config']['ciniki.artistprofiles']['ignore.cursor'] == 1 || $ciniki['config']['ciniki.artistprofiles']['ignore.cursor'] == 'yes') 
+        ) {
+        $dropbox_cursor = null;
+    }
 
     //
     // Get the settings for dropbox
@@ -94,6 +100,16 @@ function ciniki_artistprofiles_dropboxDownload(&$ciniki, $business_id) {
     if( !isset($rc['entries']) ) {
         // Nothing to update, return
         return array('stat'=>'ok');
+    }
+    // If there is more
+    $dropbox_cursor = $rc['cursor'];
+    if( count($rc['entries']) == 0 && $rc['has_more'] == 1 ) {
+        error_log('delta again');
+        $rc = $client->getDelta($dropbox_cursor, $artistprofiles);
+        if( !isset($rc['entries']) ) {
+            // Nothing to update, return
+            return array('stat'=>'ok');
+        }
     }
     $updates = array();
     $new_dropbox_cursor = $rc['cursor'];
@@ -122,7 +138,6 @@ function ciniki_artistprofiles_dropboxDownload(&$ciniki, $business_id) {
         //
         // Check for a match in the specified directory and path matches valid path list information
         //
-//        print_r($entry);
         if( preg_match("#^($artistprofiles)/([^/]+)/([^/]+)/(info.rtf|info.txt|(primary_image|synopsis|description|audio|images|links)/(.*))$#", $entry[0], $matches) ) {
             $sort_name = $matches[3];
             if( !isset($updates[$sort_name]) ) {
@@ -182,16 +197,18 @@ function ciniki_artistprofiles_dropboxDownload(&$ciniki, $business_id) {
         //
         // Lookup the artist in the artistprofiles
         //
+        $permalink = ciniki_core_makePermalink($ciniki, $sort_name);
         $strsql = "SELECT id "
             . "FROM ciniki_artistprofiles "
             . "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
-            . "AND permalink = '" . ciniki_core_dbQuote($ciniki, $sort_name) . "' "
+            . "AND permalink = '" . ciniki_core_dbQuote($ciniki, $permalink) . "' "
             . "";
         $rc = ciniki_core_dbHashQuery($ciniki, $strsql, 'ciniki.artistprofiles', 'artist');
         if( $rc['stat'] != 'ok' ) {
             ciniki_core_dbTransactionRollback($ciniki, 'ciniki.artistprofiles');
             return $rc;
         }
+
         //
         // Add artist
         //
@@ -199,7 +216,6 @@ function ciniki_artistprofiles_dropboxDownload(&$ciniki, $business_id) {
             //
             // Check permalink doesn't already exist
             //
-            $permalink = ciniki_core_makePermalink($ciniki, $sort_name);
             $strsql = "SELECT id, name "
                 . "FROM ciniki_artistprofiles "
                 . "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
@@ -273,6 +289,7 @@ function ciniki_artistprofiles_dropboxDownload(&$ciniki, $business_id) {
         //
         foreach($artist as $field => $details) {
             if( $field == 'info' ) {
+                print "info.txt: " . $details['path'] . "\n";
                 if( $details['mime_type'] == 'text/plain' ) {
                     $rc = ciniki_core_dropboxOpenTXT($ciniki, $business_id, $client, $details['path']);
                     if( $rc['stat'] != 'ok' ) {
@@ -288,10 +305,13 @@ function ciniki_artistprofiles_dropboxDownload(&$ciniki, $business_id) {
                     }
                     $content = $rc['content'];
                 }
+                print "info.txt:\n";
+                print_r($content);
+                print "\n";
                 $lines = explode("\n", $content);
                 foreach($lines as $line) {
                     $pieces = explode(":", $line);
-                    if( $pieces[0] == 'name' ) {
+                    if( isset($pieces[1]) && stristr($pieces[0], 'name') !== FALSE ) {
                         $name = rtrim(ltrim($pieces[1]));
                         if( $name != $ciniki_artist['name'] ) {
                             $update_args['name'] = $name;
