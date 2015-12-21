@@ -29,7 +29,7 @@ function ciniki_artistprofiles_cron_jobs(&$ciniki) {
 		. "";
 	$rc = ciniki_core_dbHashQuery($ciniki, $strsql, 'ciniki.sapos', 'item');
 	if( $rc['stat'] != 'ok' ) {
-		return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'2880', 'msg'=>'Unable to get list of businesses with campaigns', 'err'=>$rc['err']));
+		return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'2880', 'msg'=>'Unable to get list of businesses with artist profiles', 'err'=>$rc['err']));
 	}
 	if( !isset($rc['rows']) ) {
 		return array('stat'=>'ok');

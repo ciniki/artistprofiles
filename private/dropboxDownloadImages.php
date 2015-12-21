@@ -18,10 +18,9 @@
 
 function ciniki_artistprofiles_dropboxDownloadImages(&$ciniki, $business_id, $client, $artist, $details) {
 
-    ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dropboxOpenWebloc');
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'objectAdd');
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'objectUpdate');
-
+    ciniki_core_loadMethod($ciniki, 'ciniki', 'images', 'private', 'insertFromDropbox');
 
     foreach($details as $img) {
         $flags = 0x01;  // Visible on website
