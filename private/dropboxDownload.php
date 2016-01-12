@@ -265,6 +265,7 @@ function ciniki_artistprofiles_dropboxDownload(&$ciniki, $business_id) {
             $ciniki_artist = array(
                 'id'=>$artist_id,
                 'name'=>$sort_name,
+                'subname'=>'',
                 'sort_name'=>$sort_name,
                 'permalink'=>$permalink,
                 'status'=>10,
@@ -295,6 +296,7 @@ function ciniki_artistprofiles_dropboxDownload(&$ciniki, $business_id) {
                 return $rc;
             }
             $ciniki_artist = $rc['artist'];
+            $ciniki_artist['subname'] = '';
         }
 
         //
