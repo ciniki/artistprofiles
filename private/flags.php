@@ -24,7 +24,7 @@ function ciniki_artistprofiles_flags($ciniki, $modules) {
 //      array('flag'=>array('bit'=>'8', 'name'=>'')),
         // 0x0100
         array('flag'=>array('bit'=>'9', 'name'=>'Categories')),
-//      array('flag'=>array('bit'=>'10', 'name'=>'')),
+        array('flag'=>array('bit'=>'10', 'name'=>'Featured')),
 //      array('flag'=>array('bit'=>'11', 'name'=>'')),
 //      array('flag'=>array('bit'=>'12', 'name'=>'')),
         // 0x1000

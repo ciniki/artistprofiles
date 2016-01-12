@@ -3,6 +3,16 @@
 # -----------
 # This table is used to store the businesses settings for the artistprofiles module.
 #
+# Dropbox integration:
+# dropbox-artistprofiles        - The dropbox directory to get the profiles from
+# dropbox-cursor                - Internal setting to keep track of last cursor received from dropbox.
+#
+# Category Details:
+# tag-category-sequence-<permalink>    - The title for the category.
+# tag-category-title-<permalink>    - The title for the category.
+# tag-category-image-<permalink>    - The image to use for the category
+# tag-category-content-<permalink>  - The content to display for the category.
+#
 # Fields
 # ------
 # business_id:		The id of the business the setting is for.
