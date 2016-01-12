@@ -325,7 +325,12 @@ function ciniki_artistprofiles_dropboxDownload(&$ciniki, $business_id) {
                 $lines = explode("\n", $content);
                 foreach($lines as $line) {
                     $pieces = explode(":", $line);
-                    if( isset($pieces[1]) && stristr($pieces[0], 'name') !== FALSE ) {
+                    if( isset($pieces[1]) && stristr($pieces[0], 'subname') !== FALSE ) {
+                        $name = rtrim(ltrim($pieces[1]));
+                        if( $subname != $ciniki_artist['subname'] ) {
+                            $update_args['subname'] = $subname;
+                        }
+                    } elseif( isset($pieces[1]) && stristr($pieces[0], 'name') !== FALSE ) {
                         $name = rtrim(ltrim($pieces[1]));
                         if( $name != $ciniki_artist['name'] ) {
                             $update_args['name'] = $name;
