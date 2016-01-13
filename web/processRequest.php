@@ -154,11 +154,11 @@ function ciniki_artistprofiles_web_processRequest(&$ciniki, $settings, $business
             . "FROM ciniki_artistprofiles "
             . "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
             . "AND status = 10 "
-            . "ORDER BY sort_name "
             . "";
         if( $category['permalink'] == 'featured' ) {
             $strsql .= "AND (flags&0x01) = 0x01 ";
         }
+        $strsql .= "ORDER BY sort_name ";
         $rc = ciniki_core_dbHashQuery($ciniki, $strsql, 'ciniki.artistprofiles', 'artist');
         if( $rc['stat'] != 'ok' ) {
             return $rc;
