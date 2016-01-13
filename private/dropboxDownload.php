@@ -296,7 +296,6 @@ function ciniki_artistprofiles_dropboxDownload(&$ciniki, $business_id) {
                 return $rc;
             }
             $ciniki_artist = $rc['artist'];
-            $ciniki_artist['subname'] = '';
         }
 
         //
