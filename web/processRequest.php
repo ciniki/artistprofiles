@@ -166,7 +166,7 @@ function ciniki_artistprofiles_web_processRequest(&$ciniki, $settings, $business
         if( !isset($rc['rows']) || count($rc['rows']) == 0 ) {
             $page['blocks'][] = array('type'=>'content', 'content'=>"There are currently no artist profiles available. Please check back soon.");
         } else {
-            $page['blocks'][] = array('type'=>'tagimages', 'base_url'=>$base_url, 'tags'=>$rc['rows']);
+            $page['blocks'][] = array('type'=>'tradingcards', 'base_url'=>$base_url, 'cards'=>$rc['rows']);
         }
     }
 
@@ -176,6 +176,7 @@ function ciniki_artistprofiles_web_processRequest(&$ciniki, $settings, $business
         //
         $strsql = "SELECT ciniki_artistprofiles.id, "
             . "ciniki_artistprofiles.name, "
+            . "ciniki_artistprofiles.subname, "
             . "ciniki_artistprofiles.permalink, "
             . "ciniki_artistprofiles.primary_image_id AS image_id "
             . "FROM ciniki_artistprofiles_tags, ciniki_artistprofiles "
@@ -194,7 +195,7 @@ function ciniki_artistprofiles_web_processRequest(&$ciniki, $settings, $business
         if( !isset($rc['rows']) || count($rc['rows']) == 0 ) {
             $page['blocks'][] = array('type'=>'content', 'content'=>"There are currently no artist profiles available. Please check back soon.");
         } else {
-            $page['blocks'][] = array('type'=>'tagimages', 'base_url'=>$base_url, 'tags'=>$rc['rows']);
+            $page['blocks'][] = array('type'=>'tradingcards', 'base_url'=>$base_url, 'cards'=>$rc['rows']);
         }
 
     }
@@ -257,6 +258,7 @@ function ciniki_artistprofiles_web_processRequest(&$ciniki, $settings, $business
         if( ciniki_core_checkModuleFlags($ciniki, 'ciniki.artistprofiles', 0x0200) && $category['permalink'] == 'featured' ) {
             $strsql = "SELECT ciniki_artistprofiles.id, "
                 . "ciniki_artistprofiles.name, "
+                . "ciniki_artistprofiles.subname, "
                 . "ciniki_artistprofiles.permalink "
                 . "FROM ciniki_artistprofiles "
                 . "WHERE ciniki_artistprofiles.business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
@@ -267,6 +269,7 @@ function ciniki_artistprofiles_web_processRequest(&$ciniki, $settings, $business
         } else {
             $strsql = "SELECT ciniki_artistprofiles.id, "
                 . "ciniki_artistprofiles.name, "
+                . "ciniki_artistprofiles.subname, "
                 . "ciniki_artistprofiles.permalink "
                 . "FROM ciniki_artistprofiles_tags, ciniki_artistprofiles "
                 . "WHERE ciniki_artistprofiles_tags.business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "

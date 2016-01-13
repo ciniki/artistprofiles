@@ -19,6 +19,7 @@ function ciniki_artistprofiles_artistUpdate(&$ciniki) {
         'business_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Business'),
         'artist_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Artist'),
         'name'=>array('required'=>'no', 'blank'=>'no', 'name'=>'Name'),
+        'subname'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Sub Name'),
         'sort_name'=>array('required'=>'no', 'blank'=>'no', 'name'=>'Sort Name'),
         'permalink'=>array('required'=>'no', 'blank'=>'no', 'name'=>'Permalink'),
         'status'=>array('required'=>'no', 'blank'=>'no', 'name'=>'Status'),

@@ -66,6 +66,7 @@ function ciniki_artistprofiles_main() {
 				}},
 			'info':{'label':'Service', 'aside':'yes', 'list':{
 				'name':{'label':'Name'},
+				'subname':{'label':'Sub Name'},
 				'status_text':{'label':'Status'},
 				'flags_text':{'label':'Options'},
                 'categories':{'label':'Categories'},
@@ -148,6 +149,7 @@ function ciniki_artistprofiles_main() {
 				}},
             'general':{'label':'Service', 'aside':'yes', 'fields':{
                 'name':{'label':'Name', 'type':'text'},
+                'subname':{'label':'Sub Name', 'type':'text'},
                 'status':{'label':'Status', 'type':'toggle', 'toggles':this.artistStatuses},
                 'flags':{'label':'Options', 'type':'flags', 'join':'yes', 'flags':this.artistFlags},
                 }}, 

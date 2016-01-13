@@ -44,6 +44,7 @@ create table ciniki_artistprofiles (
     uuid char(36) not null,
     business_id int not null,
     name varchar(150) not null,
+    subname varchar(150) not null,
     sort_name varchar(150) not null,
     permalink varchar(150) not null,
     status tinyint unsigned not null,

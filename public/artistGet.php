@@ -74,6 +74,7 @@ function ciniki_artistprofiles_artistGet($ciniki) {
     if( $args['artist_id'] == 0 ) {
         $artist = array('id'=>0,
             'name'=>'',
+            'subname'=>'',
             'sort_name'=>'',
             'permalink'=>'',
             'status'=>'',
@@ -94,6 +95,7 @@ function ciniki_artistprofiles_artistGet($ciniki) {
     else {
         $strsql = "SELECT ciniki_artistprofiles.id, "
             . "ciniki_artistprofiles.name, "
+            . "ciniki_artistprofiles.subname, "
             . "ciniki_artistprofiles.sort_name, "
             . "ciniki_artistprofiles.permalink, "
             . "ciniki_artistprofiles.status, "
@@ -114,7 +116,7 @@ function ciniki_artistprofiles_artistGet($ciniki) {
         ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryTree');
         $rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.artistprofiles', array(
             array('container'=>'artists', 'fname'=>'id', 'name'=>'artist',
-                'fields'=>array('id', 'name', 'sort_name', 'permalink', 'status', 'status_text',
+                'fields'=>array('id', 'name', 'subname', 'sort_name', 'permalink', 'status', 'status_text',
                     'flags', 'flags_text', 'primary_image_id', 'primary_image_caption', 'synopsis', 'description',
                     'setup_image_id', 'setup_image_caption', 'setup_description'),
                  'maps'=>array('status_text'=>$maps['artist']['status']),

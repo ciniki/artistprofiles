@@ -20,6 +20,7 @@ function ciniki_artistprofiles_objects($ciniki) {
         'table'=>'ciniki_artistprofiles',
         'fields'=>array(
             'name'=>array('name'=>'Name'),
+            'subname'=>array('name'=>'Name'),
             'sort_name'=>array('name'=>'Sort Name'),
             'permalink'=>array('name'=>'Permalink'),
             'status'=>array('name'=>'Status'),

@@ -23,6 +23,7 @@ function ciniki_artistprofiles_artistLoad($ciniki, $business_id, $artist_id, $ar
     //
     $strsql = "SELECT ciniki_artistprofiles.id, "
         . "ciniki_artistprofiles.name, "
+        . "ciniki_artistprofiles.subname, "
         . "ciniki_artistprofiles.sort_name, "
         . "ciniki_artistprofiles.permalink, "
         . "ciniki_artistprofiles.status, "
@@ -43,7 +44,7 @@ function ciniki_artistprofiles_artistLoad($ciniki, $business_id, $artist_id, $ar
     }
     $rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.artistprofiles', array(
         array('container'=>'artists', 'fname'=>'id', 'name'=>'artist',
-            'fields'=>array('id', 'name', 'sort_name', 'permalink', 'status', 'flags', 'primary_image_id', 'primary_image_caption', 
+            'fields'=>array('id', 'name', 'subname', 'sort_name', 'permalink', 'status', 'flags', 'primary_image_id', 'primary_image_caption', 
                 'synopsis', 'description', 'setup_image_id', 'setup_description')),
         ));
     if( $rc['stat'] != 'ok' ) {
