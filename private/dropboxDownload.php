@@ -290,7 +290,7 @@ function ciniki_artistprofiles_dropboxDownload(&$ciniki, $business_id) {
         else {
             $artist_id = $rc['artist']['id'];
             ciniki_core_loadMethod($ciniki, 'ciniki', 'artistprofiles', 'private', 'artistLoad');
-            $rc = ciniki_artistprofiles_artistLoad($ciniki, $business_id, $artist_id, array('images'=>'yes', 'audio'=>'yes', 'links'=>'yes'));
+            $rc = ciniki_artistprofiles_artistLoad($ciniki, $business_id, $artist_id, array('images'=>'yes', 'audio'=>'yes', 'links'=>'yes', 'videos'=>'yes'));
             if( $rc['stat'] != 'ok' ) {
                 ciniki_core_dbTransactionRollback($ciniki, 'ciniki.artistprofiles');
                 return $rc;

@@ -55,6 +55,13 @@ function ciniki_artistprofiles_dropboxDownloadLinks(&$ciniki, $business_id, $cli
                     break;
                 }
             }
+            foreach($artist['videos'] as $artist_link) {
+                if( $artist_link['url'] == $url && $artist_link['link_type'] == $link_type ) {
+                    $found = 'yes';
+                    $found_link = $artist_link;
+                    break;
+                }
+            }
             if( $found == 'no' ) {
                 $rc = ciniki_core_objectAdd($ciniki, $business_id, 'ciniki.artistprofiles.link', array(
                     'artist_id'=>$artist['id'],
