@@ -205,6 +205,9 @@ function ciniki_artistprofiles_web_processRequest(&$ciniki, $settings, $business
     }
 
 	elseif( $display == 'artist' || $display == 'artistpic' ) {
+        if( isset($category) ) {
+            $ciniki['response']['head']['links'][] = array('rel'=>'canonical', 'href'=>$args['base_url'] . '/' . $artist_permalink);
+        }
         ciniki_core_loadMethod($ciniki, 'ciniki', 'artistprofiles', 'private', 'artistLoad');
         $rc = ciniki_artistprofiles_artistLoad($ciniki, $business_id, $artist_permalink, array('images'=>'yes', 'audio'=>'yes', 'videos'=>'yes', 'links'=>'yes'));
         if( $rc['stat'] != 'ok' ) {
@@ -215,6 +218,9 @@ function ciniki_artistprofiles_web_processRequest(&$ciniki, $settings, $business
         } else {
             $artist = $rc['artist'];
             $page['title'] = $artist['name'];
+            if( isset($artist['subname']) && $artist['subname'] != '' ) {
+                $page['subtitle'] = $artist['subname'];
+            }
             $breadcrumbs = array('name'=>$artist['name'], 'url'=>$base_url . '/' . $artist['permalink']);
             $base_url .= '/' . $artist['permalink'];
             if( isset($artist['primary_image_id']) && $artist['primary_image_id'] > 0 ) {
