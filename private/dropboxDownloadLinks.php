@@ -55,11 +55,13 @@ function ciniki_artistprofiles_dropboxDownloadLinks(&$ciniki, $business_id, $cli
                     break;
                 }
             }
-            foreach($artist['videos'] as $artist_link) {
-                if( $artist_link['url'] == $url && $artist_link['link_type'] == $link_type ) {
-                    $found = 'yes';
-                    $found_link = $artist_link;
-                    break;
+            if( isset($artist['vidoes']) ) {
+                foreach($artist['videos'] as $artist_link) {
+                    if( $artist_link['url'] == $url && $artist_link['link_type'] == $link_type ) {
+                        $found = 'yes';
+                        $found_link = $artist_link;
+                        break;
+                    }
                 }
             }
             if( $found == 'no' ) {

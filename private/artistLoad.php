@@ -61,6 +61,7 @@ function ciniki_artistprofiles_artistLoad($ciniki, $business_id, $artist_id, $ar
     $artist['setupimages'] = array();
     $artist['links'] = array();
     $artist['audio'] = array();
+    $artist['video'] = array();
 
     //
     // Get the categories
