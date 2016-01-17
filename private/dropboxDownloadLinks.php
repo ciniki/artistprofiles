@@ -55,7 +55,7 @@ function ciniki_artistprofiles_dropboxDownloadLinks(&$ciniki, $business_id, $cli
                     break;
                 }
             }
-            if( isset($artist['vidoes']) ) {
+            if( isset($artist['videos']) ) {
                 foreach($artist['videos'] as $artist_link) {
                     if( $artist_link['url'] == $url && $artist_link['link_type'] == $link_type ) {
                         $found = 'yes';
@@ -72,7 +72,7 @@ function ciniki_artistprofiles_dropboxDownloadLinks(&$ciniki, $business_id, $cli
                     'url'=>$url,
                     'description'=>$description,
                     ), 0x04);
-                if( $rc['stat'] != 'ok' ) {
+                if( $rc['stat'] != 'ok' && $rc['stat'] != 'exists' ) {
                     ciniki_core_dbTransactionRollback($ciniki, 'ciniki.artistprofiles');
                     return $rc;
                 }
