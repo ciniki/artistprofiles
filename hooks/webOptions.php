@@ -21,7 +21,7 @@ function ciniki_artistprofiles_hooks_webOptions(&$ciniki, $business_id, $args) {
 	//
 	// Check to make sure the module is enabled
 	//
-	if( !isset($ciniki['business']['modules']['ciniki.blog']) ) {
+	if( !isset($ciniki['business']['modules']['ciniki.artistprofiles']) ) {
 		return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'3042', 'msg'=>"I'm sorry, the page you requested does not exist."));
 	}
 
@@ -39,20 +39,18 @@ function ciniki_artistprofiles_hooks_webOptions(&$ciniki, $business_id, $args) {
 		$settings = $rc['settings'];
 	}
 
+	$pages['ciniki.artistprofiles'] = array('name'=>'Artist Profiles', 'options'=>array(
+        array('label'=>'Sidebar',
+            'setting'=>'page-artistprofiles-sidebar', 
+            'type'=>'toggle',
+            'value'=>(isset($settings['page-artistprofiles-sidebar'])?$settings['page-artistprofiles-sidebar']:'no'),
+            'toggles'=>array(
+                array('value'=>'no', 'label'=>'No'),
+                array('value'=>'yes', 'label'=>'Yes'),
+                ),
+            ),
+        ));
 
-	$options = array();
-
-	$options[] = array('option'=>array(
-		'label'=>'Sidebar',
-		'setting'=>'page-artistprofiles-sidebar', 
-		'type'=>'toggle',
-		'value'=>(isset($settings['page-artistprofiles-sidebar'])?$settings['page-artistprofiles-sidebar']:'no'),
-		'toggles'=>array(
-			array('toggle'=>array('value'=>'no', 'label'=>'No')),
-			array('toggle'=>array('value'=>'yes', 'label'=>'Yes')),
-			),
-		));
-
-	return array('stat'=>'ok', 'options'=>$options);
+	return array('stat'=>'ok', 'pages'=>$pages);
 }
 ?>
