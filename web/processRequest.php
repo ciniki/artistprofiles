@@ -42,27 +42,6 @@ function ciniki_artistprofiles_web_processRequest(&$ciniki, $settings, $business
     }
 
 	//
-	// Check if a file was specified to be downloaded
-	//
-/*	$download_err = '';
-	if( isset($uri_split[0]) && $uri_split[0] != ''
-		&& isset($uri_split[1]) && $uri_split[1] == 'download'
-		&& isset($uri_split[2]) && $uri_split[2] != '' 
-		&& preg_match("/^(.*)\.pdf$/", $uri_split[2], $matches)
-		) {
-		ciniki_core_loadMethod($ciniki, 'ciniki', 'blog', 'web', 'fileDownload');
-		$rc = ciniki_blog_web_fileDownload($ciniki, $ciniki['request']['business_id'], $uri_split[0], $uri_split[2], $args['blogtype']);
-		if( $rc['stat'] == 'ok' ) {
-			return array('stat'=>'ok', 'download'=>$rc['file']);
-		}
-		
-		//
-		// If there was an error locating the files, display generic error
-		//
-		return array('stat'=>'404', 'err'=>array('pkg'=>'ciniki', 'code'=>'2662', 'msg'=>'The file you requested does not exist.'));
-	} */
-
-	//
 	// Setup titles
 	//
 	if( count($page['breadcrumbs']) == 0 ) {
@@ -249,7 +228,7 @@ function ciniki_artistprofiles_web_processRequest(&$ciniki, $settings, $business
 	// Return error if nothing found to display
 	//
 	else {
-		return array('stat'=>'404', 'err'=>array('pkg'=>'ciniki', 'code'=>'2663', 'msg'=>"We're sorry, the page you requested is not available."));
+		return array('stat'=>'404', 'err'=>array('pkg'=>'ciniki', 'code'=>'3044', 'msg'=>"We're sorry, the page you requested is not available."));
 	}
 
 	//
