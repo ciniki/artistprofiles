@@ -192,6 +192,9 @@ function ciniki_artistprofiles_web_processRequest(&$ciniki, $settings, $business
         if( $rc['stat'] != 'ok' ) {
             return $rc;
         }
+        if( isset($rc['artist']) && $rc['artist']['status'] != 10 ) {
+            return array('stat'=>'404', 'err'=>array('pkg'=>'ciniki', 'code'=>'3038', 'msg'=>"We're sorry, the page you requested is not available."));
+        }
         if( !isset($rc['artist']) ) {
             return array('stat'=>'404', 'err'=>array('pkg'=>'ciniki', 'code'=>'3043', 'msg'=>"We're sorry, the page you requested is not available."));
         } else {

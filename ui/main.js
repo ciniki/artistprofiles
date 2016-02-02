@@ -21,6 +21,9 @@ function ciniki_artistprofiles_main() {
 			'mc', 'medium', 'sectioned', 'ciniki.artistprofiles.main.menu');
         this.menu.sections = {
             'categories':{'label':'Categories', 'aside':'yes', 'visible':'no', 'type':'simplegrid', 'num_cols':1},
+			'search':{'label':'Search', 'type':'livesearchgrid', 'livesearchcols':1, 
+				'hint':'Artist Name', 'noData':'No artists found',
+				},
 			'artists':{'label':'Artist Profiles', 'type':'simplegrid', 'num_cols':2,
 				'noData':'No artist profiles',
 				'addTxt':'Add Artist',
@@ -29,6 +32,26 @@ function ciniki_artistprofiles_main() {
 			};
 		this.menu.sectionData = function(s) { return this.data[s]; }
 		this.menu.noData = function(s) { return this.sections[s].noData; }
+		this.menu.liveSearchCb = function(s, i, value) {
+			if( s == 'search' && value != '' ) {
+				M.api.getJSONBgCb('ciniki.artistprofiles.artistSearch', {'business_id':M.curBusinessID, 'start_needle':value, 'limit':'10'}, 
+					function(rsp) { 
+						M.ciniki_artistprofiles_main.menu.liveSearchShow('search', null, M.gE(M.ciniki_artistprofiles_main.menu.panelUID + '_' + s), rsp.artists); 
+					});
+				return true;
+			}
+		};
+		this.menu.liveSearchResultValue = function(s, f, i, j, d) {
+			if( s == 'search' ) { 
+				switch(j) {
+					case 0: return d.name;
+				}
+			}
+			return '';
+		};
+		this.menu.liveSearchResultRowFn = function(s, f, i, j, d) { 
+            return 'M.ciniki_artistprofiles_main.artistShow(\'M.ciniki_artistprofiles_main.menuShow();\',\'' + d.id + '\');';
+		};
 		this.menu.cellValue = function(s, i, j, d) {
             if( s == 'categories' ) {
                 return d.title;
