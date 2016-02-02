@@ -308,6 +308,7 @@ function ciniki_artistprofiles_dropboxDownload(&$ciniki, $business_id) {
         //
         foreach($artist as $field => $details) {
             if( $field == 'info' ) {
+                $content = '';
                 if( $details['mime_type'] == 'text/plain' ) {
                     $rc = ciniki_core_dropboxOpenTXT($ciniki, $business_id, $client, $details['path']);
                     if( $rc['stat'] != 'ok' ) {
