@@ -43,6 +43,7 @@ function ciniki_artistprofiles_linkAdd(&$ciniki) {
     //
     // Check for link type
     //
+    ciniki_core_loadMethod($ciniki, 'ciniki', 'artistprofiles', 'private', 'linkType');
     $rc = ciniki_artistprofiles_linkType($ciniki, $args['business_id'], $args['url']);
     if( $rc['stat'] != 'ok' ) {
         return $rc;

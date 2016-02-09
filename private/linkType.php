@@ -13,7 +13,7 @@
 function ciniki_artistprofiles_linkType($ciniki, $business_id, $url) {
     $link_type = '1000';
 
-    if( preg_match('/youtube.com/', $url) ) {
+    if( preg_match('/youtube.com.*watch/', $url) ) {
         $link_type = 2000;
     } elseif( preg_match('/vimeo.com/', $url) ) {
         $link_type = 2001;
