@@ -115,6 +115,7 @@ function ciniki_artistprofiles_dropboxDownload(&$ciniki, $business_id) {
     $new_dropbox_cursor = $rc['cursor'];
     $entries = $rc['entries'];
     foreach($entries as $entry) {
+        print_r($entry);
         //
         // Entries look like:
         //      [0] => /website/artists/canada/rivett-andrew/primary_image/img_0610.jpg
@@ -138,6 +139,7 @@ function ciniki_artistprofiles_dropboxDownload(&$ciniki, $business_id) {
         //
         // Check for a match in the specified directory and path matches valid path list information
         //
+        
         if( preg_match("#^($artistprofiles)/([^/]+)/([^/]+)/(info.rtf|info.txt|(primary_image|synopsis|description|audio|images|links)/(.*))$#", $entry[0], $matches) ) {
             $sort_name = $matches[3];
             if( !isset($updates[$sort_name]) ) {
