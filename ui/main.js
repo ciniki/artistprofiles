@@ -385,7 +385,7 @@ function ciniki_artistprofiles_main() {
 						M.api.err(rsp);
 						return false;
 					}
-					M.ciniki_artistprofiles_main.edit.close();
+					M.ciniki_artistprofiles_main.artist.close();
 				});
 		}
 	};
