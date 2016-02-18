@@ -116,6 +116,10 @@ function ciniki_artistprofiles_dropboxDownload(&$ciniki, $business_id) {
     $entries = $rc['entries'];
     foreach($entries as $entry) {
         print_r($entry);
+        if( !isset($entry[1]) || count($entry[2]) == 0 ) {
+            print "skipping";
+            continue;
+        }
         //
         // Entries look like:
         //      [0] => /website/artists/canada/rivett-andrew/primary_image/img_0610.jpg
