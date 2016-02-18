@@ -116,7 +116,7 @@ function ciniki_artistprofiles_dropboxDownload(&$ciniki, $business_id) {
     $entries = $rc['entries'];
     foreach($entries as $entry) {
         print_r($entry);
-        if( !isset($entry[1]) || count($entry[2]) == 0 ) {
+        if( !isset($entry[1]) || count($entry[1]) == 0 ) {
             print "skipping";
             continue;
         }
