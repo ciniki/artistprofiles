@@ -60,6 +60,5 @@ create table ciniki_artistprofiles (
     last_updated datetime not null,
     primary key (id),
     unique index (uuid),
-    unique index (sort_name),
     index sync (business_id, uuid, last_updated)
 ) ENGINE='InnoDB', COMMENT='v1.01';
