@@ -40,10 +40,10 @@ function ciniki_artistprofiles_hooks_webIndexObject($ciniki, $business_id, $args
             . "";
         $rc = ciniki_core_dbHashQuery($ciniki, $strsql, 'ciniki.artistprofiles', 'item');
         if( $rc['stat'] != 'ok' ) {
-            return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'2380', 'msg'=>'Object not found'));
+            return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'3280', 'msg'=>'Object not found'));
         }
         if( !isset($rc['item']) ) {
-            return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'2381', 'msg'=>'Object not found'));
+            return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'3281', 'msg'=>'Object not found'));
         }
 
         //
