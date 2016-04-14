@@ -53,6 +53,7 @@ function ciniki_artistprofiles_hooks_webIndexObject($ciniki, $business_id, $args
             return array('stat'=>'ok');
         }
         $object = array(
+            'label'=>'Artists',
             'title'=>$rc['item']['name'],
             'subtitle'=>$rc['item']['subname'],
             'meta'=>'',
