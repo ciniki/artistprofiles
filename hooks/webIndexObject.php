@@ -61,8 +61,8 @@ function ciniki_artistprofiles_hooks_webIndexObject($ciniki, $business_id, $args
             'synopsis'=>$rc['item']['synopsis'],
             'object'=>'ciniki.artistprofiles.artist',
             'object_id'=>$rc['item']['id'],
-            'primary_words'=>$rc['item']['name'] . ' ' . $rc['item']['subname'],
-            'secondary_words'=>$rc['item']['synopsis'],
+            'primary_words'=>$rc['item']['name'],
+            'secondary_words'=>$rc['item']['subname'] . ' ' . $rc['item']['synopsis'],
             'tertiary_words'=>$rc['item']['description'],
             'weight'=>20000,
             'url'=>$base_url . '/' . $rc['item']['permalink']
