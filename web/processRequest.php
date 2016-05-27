@@ -203,6 +203,7 @@ function ciniki_artistprofiles_web_processRequest(&$ciniki, $settings, $business
             }
             $page['breadcrumbs'][] = array('name'=>$artist['name'], 'url'=>$base_url);
             if( $display == 'artistpic' ) {
+                $page['title'] = "<a href='$base_url'>" . $artist['name'] . "</a>";
                 ciniki_core_loadMethod($ciniki, 'ciniki', 'web', 'private', 'galleryFindNextPrev');
                 $rc = ciniki_web_galleryFindNextPrev($ciniki, $artist['images'], $image_permalink);
                 if( $rc['stat'] != 'ok' ) {
