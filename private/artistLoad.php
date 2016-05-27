@@ -91,7 +91,7 @@ function ciniki_artistprofiles_artistLoad($ciniki, $business_id, $artist_id, $ar
     if( isset($args['images']) && ($args['images'] == 'yes' || $args['images'] == 'thumbs') ) {
         $strsql = "SELECT id, "
             . "(flags&0xF0) AS type, "
-            . "name, flags, image_id, description "
+            . "permalink, name AS title, flags, image_id, description "
             . "FROM ciniki_artistprofiles_images "
             . "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
             . "AND ciniki_artistprofiles_images.artist_id = '" . ciniki_core_dbQuote($ciniki, $artist_id) . "' "
@@ -100,7 +100,7 @@ function ciniki_artistprofiles_artistLoad($ciniki, $business_id, $artist_id, $ar
             array('container'=>'types', 'fname'=>'type', 
                 'fields'=>array('type')),
             array('container'=>'images', 'fname'=>'id', 
-                'fields'=>array('id', 'name', 'flags', 'image_id', 'description')),
+                'fields'=>array('id', 'permalink', 'title', 'flags', 'image_id', 'description')),
         ));
         if( $rc['stat'] != 'ok' ) {
             return $rc;

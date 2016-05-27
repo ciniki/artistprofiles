@@ -81,7 +81,7 @@ function ciniki_artistprofiles_web_processRequest(&$ciniki, $settings, $business
         ) {
         $category = $categories[$uri_split[0]];
         $page['title'] = $category['title'];
-        $breadcrumbs = array('name'=>$category['title'], 'url'=>$base_url . '/' . $category['permalink']);
+        $page['breadcrumbs'][] = array('name'=>$category['title'], 'url'=>$base_url . '/' . $category['permalink']);
         $base_url .= '/' . $category['permalink'];
         array_shift($uri_split);
     }
@@ -95,9 +95,7 @@ function ciniki_artistprofiles_web_processRequest(&$ciniki, $settings, $business
 		//
 		// Check for gallery pic request
 		//
-		if( isset($uri_split[1]) && $uri_split[1] == 'gallery'
-			&& isset($uri_split[2]) && $uri_split[2] != '' 
-			) {
+		if( isset($uri_split[1]) && $uri_split[1] == 'gallery' && isset($uri_split[2]) && $uri_split[2] != '' ) {
 			$image_permalink = $uri_split[2];
 			$display = 'artistpic';
 		}
@@ -203,26 +201,55 @@ function ciniki_artistprofiles_web_processRequest(&$ciniki, $settings, $business
             if( isset($artist['subname']) && $artist['subname'] != '' ) {
                 $page['subtitle'] = $artist['subname'];
             }
-            $breadcrumbs = array('name'=>$artist['name'], 'url'=>$base_url . '/' . $artist['permalink']);
-            $base_url .= '/' . $artist['permalink'];
-            if( isset($artist['primary_image_id']) && $artist['primary_image_id'] > 0 ) {
-                $page['blocks'][] = array('type'=>'image', 'section'=>'primary-image', 'primary'=>'yes', 'image_id'=>$artist['primary_image_id'], 
-                    'title'=>$artist['name'], 'caption'=>$artist['primary_image_caption']);
-            }
-            if( isset($artist['description']) && $artist['description'] != '' ) {
-                $page['blocks'][] = array('type'=>'content', 'section'=>'content', 'title'=>'', 'content'=>$artist['description']);
-            } elseif( isset($artist['synopsis']) && $artist['synopsis'] != '' ) {
-                $page['blocks'][] = array('type'=>'content', 'section'=>'content', 'title'=>'', 'content'=>$artist['synopsis']);
-            }
-			if( isset($artist['links']) && count($artist['links']) > 0 ) {
-				$page['blocks'][] = array('type'=>'links', 'section'=>'links', 'title'=>'Links', 'links'=>$artist['links']);
-			}
-			if( isset($artist['videos']) && count($artist['videos']) > 0 ) {
-				$page['blocks'][] = array('type'=>'videolinks', 'section'=>'videos', 'title'=>'Videos', 'videos'=>$artist['videos']);
-			}
-            // Add share buttons  
-            if( !isset($settings['page-artistprofiles-share-buttons']) || $settings['page-artistprofiles-share-buttons'] == 'yes' ) {
-                $page['blocks'][] = array('type'=>'sharebuttons', 'section'=>'share', 'pagetitle'=>$artist['name'], 'tags'=>array());
+            $page['breadcrumbs'][] = array('name'=>$artist['name'], 'url'=>$base_url);
+            if( $display == 'artistpic' ) {
+                ciniki_core_loadMethod($ciniki, 'ciniki', 'web', 'private', 'galleryFindNextPrev');
+                $rc = ciniki_web_galleryFindNextPrev($ciniki, $artist['images'], $image_permalink);
+                if( $rc['stat'] != 'ok' ) {
+                    return $rc;
+                }
+                if( $rc['img'] == NULL ) {
+                    $page['blocks'][] = array('type'=>'message', 'content'=>"I'm sorry, but we can't seem to find the image you requested.");
+                } else {
+                    $page['breadcrumbs'][] = array('name'=>$rc['img']['title'], 'url'=>$base_url . '/gallery/' . $image_permalink);
+                    if( $rc['img']['title'] != '' ) {
+                        $page['title'] .= ' - ' . $rc['img']['title'];
+                    }
+                    $block = array('type'=>'galleryimage', 'section'=>'gallery-primary-image', 'primary'=>'yes', 'image'=>$rc['img']);
+                    if( $rc['prev'] != null ) {
+                        $block['prev'] = array('url'=>$base_url . '/gallery/' . $rc['prev']['permalink'], 'image_id'=>$rc['prev']['image_id']);
+                    }
+                    if( $rc['next'] != null ) {
+                        $block['next'] = array('url'=>$base_url . '/gallery/' . $rc['next']['permalink'], 'image_id'=>$rc['next']['image_id']);
+                    }
+                    $page['blocks'][] = $block;
+                    $page['blocks'][] = array('type'=>'gallery', 'title'=>'Additional Images', 'section'=>'gallery-images', 'base_url'=>$base_url . '/gallery', 'images'=>$artist['images']);
+                }
+            } else {
+                if( isset($artist['primary_image_id']) && $artist['primary_image_id'] > 0 ) {
+                    $page['blocks'][] = array('type'=>'image', 'section'=>'primary-image', 'primary'=>'yes', 'image_id'=>$artist['primary_image_id'], 
+                        'title'=>$artist['name'], 'caption'=>$artist['primary_image_caption']);
+                }
+                if( isset($artist['description']) && $artist['description'] != '' ) {
+                    $page['blocks'][] = array('type'=>'content', 'section'=>'content', 'title'=>'', 'content'=>$artist['description']);
+                } elseif( isset($artist['synopsis']) && $artist['synopsis'] != '' ) {
+                    $page['blocks'][] = array('type'=>'content', 'section'=>'content', 'title'=>'', 'content'=>$artist['synopsis']);
+                }
+                if( isset($artist['links']) && count($artist['links']) > 0 ) {
+                    $page['blocks'][] = array('type'=>'links', 'section'=>'links', 'title'=>'Links', 'links'=>$artist['links']);
+                }
+                if( isset($artist['videos']) && count($artist['videos']) > 0 ) {
+                    $page['blocks'][] = array('type'=>'videolinks', 'section'=>'videos', 'title'=>'Videos', 'videos'=>$artist['videos']);
+                }
+                // Add share buttons  
+                if( !isset($settings['page-artistprofiles-share-buttons']) || $settings['page-artistprofiles-share-buttons'] == 'yes' ) {
+                    $page['blocks'][] = array('type'=>'sharebuttons', 'section'=>'share', 'pagetitle'=>$artist['name'], 'tags'=>array());
+                }
+                // Add gallery
+                if( isset($artist['images']) 
+                    && (($artist['primary_image_id'] > 0 && count($artist['images']) > 1 ) || ($artist['primary_image_id'] == 0 && count($artist['images']) > 0)) ) {
+                    $page['blocks'][] = array('type'=>'gallery', 'title'=>'Additional Images', 'section'=>'additional-images', 'base_url'=>$base_url . '/gallery', 'images'=>$artist['images']);
+                }
             }
         }
     }
