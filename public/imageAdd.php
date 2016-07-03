@@ -41,44 +41,44 @@ function ciniki_artistprofiles_imageAdd(&$ciniki) {
         return $rc;
     }
 
-	//
-	// Get a UUID for use in permalink
-	//
-	ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbUUID');
-	$rc = ciniki_core_dbUUID($ciniki, 'ciniki.artistprofiles');
-	if( $rc['stat'] != 'ok' ) {
-		return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'2890', 'msg'=>'Unable to get a new UUID', 'err'=>$rc['err']));
-	}
-	$args['uuid'] = $rc['uuid'];
+    //
+    // Get a UUID for use in permalink
+    //
+    ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbUUID');
+    $rc = ciniki_core_dbUUID($ciniki, 'ciniki.artistprofiles');
+    if( $rc['stat'] != 'ok' ) {
+        return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'2890', 'msg'=>'Unable to get a new UUID', 'err'=>$rc['err']));
+    }
+    $args['uuid'] = $rc['uuid'];
 
-	//
-	// Determine the permalink
-	//
-	if( !isset($args['permalink']) || $args['permalink'] == '' ) {
+    //
+    // Determine the permalink
+    //
+    if( !isset($args['permalink']) || $args['permalink'] == '' ) {
         ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'makePermalink');
         if( isset($args['name']) && $args['name'] != '' ) {
             $args['permalink'] = ciniki_core_makePermalink($ciniki, $args['name']);
         } else {
             $args['permalink'] = ciniki_core_makePermalink($ciniki, $args['uuid']);
         }
-	}
+    }
 
-	//
-	// Check the permalink doesn't already exist
-	//
-	$strsql = "SELECT id, name, permalink "
+    //
+    // Check the permalink doesn't already exist
+    //
+    $strsql = "SELECT id, name, permalink "
         . "FROM ciniki_artistprofiles_images "
-		. "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
-		. "AND artist_id = '" . ciniki_core_dbQuote($ciniki, $args['artist_id']) . "' "
-		. "AND permalink = '" . ciniki_core_dbQuote($ciniki, $args['permalink']) . "' "
-		. "";
-	$rc = ciniki_core_dbHashQuery($ciniki, $strsql, 'ciniki.artistprofiles', 'image');
-	if( $rc['stat'] != 'ok' ) {
-		return $rc;
-	}
-	if( $rc['num_rows'] > 0 ) {
-		return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'2892', 'msg'=>'You already have an image with this name, please choose another name'));
-	}
+        . "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+        . "AND artist_id = '" . ciniki_core_dbQuote($ciniki, $args['artist_id']) . "' "
+        . "AND permalink = '" . ciniki_core_dbQuote($ciniki, $args['permalink']) . "' "
+        . "";
+    $rc = ciniki_core_dbHashQuery($ciniki, $strsql, 'ciniki.artistprofiles', 'image');
+    if( $rc['stat'] != 'ok' ) {
+        return $rc;
+    }
+    if( $rc['num_rows'] > 0 ) {
+        return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'2892', 'msg'=>'You already have an image with this name, please choose another name'));
+    }
 
     //
     // Start transaction

@@ -53,11 +53,11 @@ function ciniki_artistprofiles_artistSearch($ciniki) {
             . ") "
         . "ORDER BY sort_name "
         . "";
-	if( isset($args['limit']) && is_numeric($args['limit']) && $args['limit'] > 0 ) {
-		$strsql .= "LIMIT " . ciniki_core_dbQuote($ciniki, $args['limit']) . " ";	// is_numeric verified
-	} else {
-		$strsql .= "LIMIT 25 ";
-	}
+    if( isset($args['limit']) && is_numeric($args['limit']) && $args['limit'] > 0 ) {
+        $strsql .= "LIMIT " . ciniki_core_dbQuote($ciniki, $args['limit']) . " ";   // is_numeric verified
+    } else {
+        $strsql .= "LIMIT 25 ";
+    }
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryArrayTree');
     $rc = ciniki_core_dbHashQueryArrayTree($ciniki, $strsql, 'ciniki.artistprofiles', array(
         array('container'=>'artists', 'fname'=>'id', 

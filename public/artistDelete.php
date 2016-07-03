@@ -79,18 +79,18 @@ function ciniki_artistprofiles_artistDelete(&$ciniki) {
         return $rc;
     }
 
-	//
-	// Remove any tags
-	//
-	if( ($ciniki['business']['modules']['ciniki.artistprofiles']['flags']&0x10) > 0 ) {
-		ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'tagsDelete');
-		$rc = ciniki_core_tagsDelete($ciniki, 'ciniki.artistprofiles', 'tag', $args['business_id'],
-			'ciniki_artistprofiles_tags', 'ciniki_artistprofiles_history', 'artist_id', $args['artist_id']);
-		if( $rc['stat'] != 'ok' ) {
-			ciniki_core_dbTransactionRollback($ciniki, 'ciniki.artistprofiles');
-			return $rc;
-		}
-	}
+    //
+    // Remove any tags
+    //
+    if( ($ciniki['business']['modules']['ciniki.artistprofiles']['flags']&0x10) > 0 ) {
+        ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'tagsDelete');
+        $rc = ciniki_core_tagsDelete($ciniki, 'ciniki.artistprofiles', 'tag', $args['business_id'],
+            'ciniki_artistprofiles_tags', 'ciniki_artistprofiles_history', 'artist_id', $args['artist_id']);
+        if( $rc['stat'] != 'ok' ) {
+            ciniki_core_dbTransactionRollback($ciniki, 'ciniki.artistprofiles');
+            return $rc;
+        }
+    }
 
     //
     // Commit the transaction

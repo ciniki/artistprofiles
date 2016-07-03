@@ -7,10 +7,10 @@
 // Arguments
 // ---------
 // ciniki:
-// settings:		The web settings structure.
-// business_id:		The ID of the business to get options for.
+// settings:        The web settings structure.
+// business_id:     The ID of the business to get options for.
 //
-// args:			The possible arguments for profiles
+// args:            The possible arguments for profiles
 //
 //
 // Returns
@@ -18,28 +18,28 @@
 //
 function ciniki_artistprofiles_hooks_webOptions(&$ciniki, $business_id, $args) {
 
-	//
-	// Check to make sure the module is enabled
-	//
-	if( !isset($ciniki['business']['modules']['ciniki.artistprofiles']) ) {
-		return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'3042', 'msg'=>"I'm sorry, the page you requested does not exist."));
-	}
+    //
+    // Check to make sure the module is enabled
+    //
+    if( !isset($ciniki['business']['modules']['ciniki.artistprofiles']) ) {
+        return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'3042', 'msg'=>"I'm sorry, the page you requested does not exist."));
+    }
 
-	//
-	// Get the settings from the database
-	//
-	ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbDetailsQueryDash');
-	$rc = ciniki_core_dbDetailsQueryDash($ciniki, 'ciniki_web_settings', 'business_id', $business_id, 'ciniki.web', 'settings', 'page-artistprofiles');
-	if( $rc['stat'] != 'ok' ) {
-		return $rc;
-	}
-	if( !isset($rc['settings']) ) {
-		$settings = array();
-	} else {
-		$settings = $rc['settings'];
-	}
+    //
+    // Get the settings from the database
+    //
+    ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbDetailsQueryDash');
+    $rc = ciniki_core_dbDetailsQueryDash($ciniki, 'ciniki_web_settings', 'business_id', $business_id, 'ciniki.web', 'settings', 'page-artistprofiles');
+    if( $rc['stat'] != 'ok' ) {
+        return $rc;
+    }
+    if( !isset($rc['settings']) ) {
+        $settings = array();
+    } else {
+        $settings = $rc['settings'];
+    }
 
-	$pages['ciniki.artistprofiles'] = array('name'=>'Artist Profiles', 'options'=>array(
+    $pages['ciniki.artistprofiles'] = array('name'=>'Artist Profiles', 'options'=>array(
         array('label'=>'Sidebar',
             'setting'=>'page-artistprofiles-sidebar', 
             'type'=>'toggle',
@@ -51,6 +51,6 @@ function ciniki_artistprofiles_hooks_webOptions(&$ciniki, $business_id, $args) {
             ),
         ));
 
-	return array('stat'=>'ok', 'pages'=>$pages);
+    return array('stat'=>'ok', 'pages'=>$pages);
 }
 ?>

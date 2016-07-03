@@ -11,8 +11,8 @@
 // -------
 //
 function ciniki_artistprofiles_maps($ciniki) {
-	$maps = array();
-	$maps['artist'] = array(
+    $maps = array();
+    $maps['artist'] = array(
         'status'=>array(
             '10'=>'Active',
             '50'=>'Inactive',
@@ -22,6 +22,6 @@ function ciniki_artistprofiles_maps($ciniki) {
             ),
         );
 
-	return array('stat'=>'ok', 'maps'=>$maps);
+    return array('stat'=>'ok', 'maps'=>$maps);
 }
 ?>

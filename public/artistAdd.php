@@ -34,7 +34,7 @@ function ciniki_artistprofiles_artistAdd(&$ciniki) {
         'setup_image_id'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Setup Image'),
         'setup_image_caption'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Setup Image Caption'),
         'setup_description'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Description'),
-		'categories'=>array('required'=>'no', 'blank'=>'yes', 'type'=>'list', 'delimiter'=>'::', 'name'=>'Categories'),
+        'categories'=>array('required'=>'no', 'blank'=>'yes', 'type'=>'list', 'delimiter'=>'::', 'name'=>'Categories'),
         ));
     if( $rc['stat'] != 'ok' ) {
         return $rc;
@@ -97,19 +97,19 @@ function ciniki_artistprofiles_artistAdd(&$ciniki) {
     }
     $artist_id = $rc['id'];
 
-	//
-	// Update the categories
-	//
-	if( isset($args['categories']) ) {
-		ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'tagsUpdate');
-		$rc = ciniki_core_tagsUpdate($ciniki, 'ciniki.artistprofiles', 'tag', $args['business_id'],
-			'ciniki_artistprofiles_tags', 'ciniki_artistprofiles_history',
-			'artist_id', $artist_id, 10, $args['categories']);
-		if( $rc['stat'] != 'ok' ) {
-			ciniki_core_dbTransactionRollback($ciniki, 'ciniki.artistprofiles');
-			return $rc;
-		}
-	}
+    //
+    // Update the categories
+    //
+    if( isset($args['categories']) ) {
+        ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'tagsUpdate');
+        $rc = ciniki_core_tagsUpdate($ciniki, 'ciniki.artistprofiles', 'tag', $args['business_id'],
+            'ciniki_artistprofiles_tags', 'ciniki_artistprofiles_history',
+            'artist_id', $artist_id, 10, $args['categories']);
+        if( $rc['stat'] != 'ok' ) {
+            ciniki_core_dbTransactionRollback($ciniki, 'ciniki.artistprofiles');
+            return $rc;
+        }
+    }
 
     //
     // Commit the transaction

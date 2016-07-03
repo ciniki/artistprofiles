@@ -31,7 +31,7 @@ function ciniki_artistprofiles_artistUpdate(&$ciniki) {
         'setup_image_id'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Setup Image'),
         'setup_image_caption'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Setup Image Caption'),
         'setup_description'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Description'),
-		'categories'=>array('required'=>'no', 'blank'=>'yes', 'type'=>'list', 'delimiter'=>'::', 'name'=>'Categories'),
+        'categories'=>array('required'=>'no', 'blank'=>'yes', 'type'=>'list', 'delimiter'=>'::', 'name'=>'Categories'),
         ));
     if( $rc['stat'] != 'ok' ) {
         return $rc;
@@ -48,26 +48,26 @@ function ciniki_artistprofiles_artistUpdate(&$ciniki) {
         return $rc;
     }
 
-	if( isset($args['name']) ) {
-		ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'makePermalink');
-		$args['permalink'] = ciniki_core_makePermalink($ciniki, $args['name']);
-		//
-		// Make sure the permalink is unique
-		//
-		$strsql = "SELECT id, name, permalink "
+    if( isset($args['name']) ) {
+        ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'makePermalink');
+        $args['permalink'] = ciniki_core_makePermalink($ciniki, $args['name']);
+        //
+        // Make sure the permalink is unique
+        //
+        $strsql = "SELECT id, name, permalink "
             . "FROM ciniki_artistprofiles "
-			. "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
-			. "AND permalink = '" . ciniki_core_dbQuote($ciniki, $args['permalink']) . "' "
-			. "AND id <> '" . ciniki_core_dbQuote($ciniki, $args['artist_id']) . "' "
-			. "";
-		$rc = ciniki_core_dbHashQuery($ciniki, $strsql, 'ciniki.events', 'event');
-		if( $rc['stat'] != 'ok' ) {
-			return $rc;
-		}
-		if( $rc['num_rows'] > 0 ) {
-			return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'2889', 'msg'=>'You already have an artist with this name, please choose another name'));
-		}
-	}
+            . "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+            . "AND permalink = '" . ciniki_core_dbQuote($ciniki, $args['permalink']) . "' "
+            . "AND id <> '" . ciniki_core_dbQuote($ciniki, $args['artist_id']) . "' "
+            . "";
+        $rc = ciniki_core_dbHashQuery($ciniki, $strsql, 'ciniki.events', 'event');
+        if( $rc['stat'] != 'ok' ) {
+            return $rc;
+        }
+        if( $rc['num_rows'] > 0 ) {
+            return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'2889', 'msg'=>'You already have an artist with this name, please choose another name'));
+        }
+    }
 
     //
     // Start transaction
@@ -91,19 +91,19 @@ function ciniki_artistprofiles_artistUpdate(&$ciniki) {
         return $rc;
     }
 
-	//
-	// Update the categories
-	//
-	if( isset($args['categories']) ) {
-		ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'tagsUpdate');
-		$rc = ciniki_core_tagsUpdate($ciniki, 'ciniki.artistprofiles', 'tag', $args['business_id'],
-			'ciniki_artistprofiles_tags', 'ciniki_artistprofiles_history',
-			'artist_id', $args['artist_id'], 10, $args['categories']);
-		if( $rc['stat'] != 'ok' ) {
-			ciniki_core_dbTransactionRollback($ciniki, 'ciniki.artistprofiles');
-			return $rc;
-		}
-	}
+    //
+    // Update the categories
+    //
+    if( isset($args['categories']) ) {
+        ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'tagsUpdate');
+        $rc = ciniki_core_tagsUpdate($ciniki, 'ciniki.artistprofiles', 'tag', $args['business_id'],
+            'ciniki_artistprofiles_tags', 'ciniki_artistprofiles_history',
+            'artist_id', $args['artist_id'], 10, $args['categories']);
+        if( $rc['stat'] != 'ok' ) {
+            ciniki_core_dbTransactionRollback($ciniki, 'ciniki.artistprofiles');
+            return $rc;
+        }
+    }
 
     //
     // Commit the transaction

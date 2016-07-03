@@ -7,27 +7,27 @@
 // Arguments
 // ---------
 // ciniki:
-// settings:		The web settings structure.
-// business_id:		The ID of the business to get events for.
+// settings:        The web settings structure.
+// business_id:     The ID of the business to get events for.
 //
-// args:			The possible arguments for posts
+// args:            The possible arguments for posts
 //
 //
 // Returns
 // -------
 //
 function ciniki_artistprofiles_web_subMenuItems(&$ciniki, $settings, $business_id, $args) {
-	
-	if( !isset($ciniki['business']['modules']['ciniki.artistprofiles']) ) {
-		return array('stat'=>'404', 'err'=>array('pkg'=>'ciniki', 'code'=>'3040', 'msg'=>"I'm sorry, the file you requested does not exist."));
-	}
+    
+    if( !isset($ciniki['business']['modules']['ciniki.artistprofiles']) ) {
+        return array('stat'=>'404', 'err'=>array('pkg'=>'ciniki', 'code'=>'3040', 'msg'=>"I'm sorry, the file you requested does not exist."));
+    }
 
-	//
-	// Return nothing if the page format doesn't have a submenu
-	//
-	if( isset($settings['page-artistprofiles-submenu']) && $settings['page-artistprofiles-submenu'] != 'yes' ) {
-		return array('stat'=>'ok', 'submenu'=>array());
-	}
+    //
+    // Return nothing if the page format doesn't have a submenu
+    //
+    if( isset($settings['page-artistprofiles-submenu']) && $settings['page-artistprofiles-submenu'] != 'yes' ) {
+        return array('stat'=>'ok', 'submenu'=>array());
+    }
 
     $submenu = array();
 
@@ -103,6 +103,6 @@ function ciniki_artistprofiles_web_subMenuItems(&$ciniki, $settings, $business_i
         });
     }
 
-	return array('stat'=>'ok', 'submenu'=>$submenu);
+    return array('stat'=>'ok', 'submenu'=>$submenu);
 }
 ?>

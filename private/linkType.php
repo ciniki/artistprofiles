@@ -19,6 +19,6 @@ function ciniki_artistprofiles_linkType($ciniki, $business_id, $url) {
         $link_type = 2001;
     }
 
-	return array('stat'=>'ok', 'link_type'=>$link_type);
+    return array('stat'=>'ok', 'link_type'=>$link_type);
 }
 ?>

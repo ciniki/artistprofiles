@@ -8,7 +8,7 @@
 // ---------
 // api_key:
 // auth_token:
-// business_id:		The ID of the business to get the ATDO settings for.
+// business_id:     The ID of the business to get the ATDO settings for.
 // 
 // Returns
 // -------
@@ -17,7 +17,7 @@ function ciniki_artistprofiles_categoryGet($ciniki) {
     //  
     // Find all the required and optional arguments
     //  
-	ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'prepareArgs');
+    ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'prepareArgs');
     $rc = ciniki_core_prepareArgs($ciniki, 'no', array(
         'business_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Business'), 
         'category'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Category'), 
@@ -31,22 +31,22 @@ function ciniki_artistprofiles_categoryGet($ciniki) {
     // Make sure this module is activated, and
     // check permission to run this function for this business
     //  
-	ciniki_core_loadMethod($ciniki, 'ciniki', 'artistprofiles', 'private', 'checkAccess');
+    ciniki_core_loadMethod($ciniki, 'ciniki', 'artistprofiles', 'private', 'checkAccess');
     $rc = ciniki_artistprofiles_checkAccess($ciniki, $args['business_id'], 'ciniki.artistprofiles.categoryGet'); 
     if( $rc['stat'] != 'ok' ) { 
         return $rc;
     }   
-	
-	//
-	// Grab the settings for the business from the database
-	//
-	$strsql = "SELECT detail_key, detail_value "
+    
+    //
+    // Grab the settings for the business from the database
+    //
+    $strsql = "SELECT detail_key, detail_value "
         . "FROM ciniki_artistprofiles_settings "
         . "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
         . "AND detail_key LIKE 'tag-category-%-" . ciniki_core_dbQuote($ciniki, $args['category']) . "' "
         . "";
-	ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbQueryList2');
-	$rc = ciniki_core_dbQueryList2($ciniki, $strsql, 'ciniki.artistprofiles', 'settings');
+    ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbQueryList2');
+    $rc = ciniki_core_dbQueryList2($ciniki, $strsql, 'ciniki.artistprofiles', 'settings');
     if( $rc['stat'] != 'ok' ) {
         return $rc;
     }
@@ -62,6 +62,6 @@ function ciniki_artistprofiles_categoryGet($ciniki) {
         'content'=>(isset($settings['tag-category-content-' . $args['category']]) ? $settings['tag-category-content-' . $args['category']] : ''),
         );
 
-	return array('stat'=>'ok', 'category'=>$category);
+    return array('stat'=>'ok', 'category'=>$category);
 }
 ?>
