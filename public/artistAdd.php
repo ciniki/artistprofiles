@@ -23,7 +23,7 @@ function ciniki_artistprofiles_artistAdd(&$ciniki) {
         'business_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Business'),
         'name'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Name'),
         'subname'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Sub Name'),
-        'sort_name'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Sort Name'),
+        'sort_name'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Sort Name'),
         'permalink'=>array('required'=>'no', 'blank'=>'no', 'name'=>'Permalink'),
         'status'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Status'),
         'flags'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Options'),
@@ -48,6 +48,13 @@ function ciniki_artistprofiles_artistAdd(&$ciniki) {
     $rc = ciniki_artistprofiles_checkAccess($ciniki, $args['business_id'], 'ciniki.artistprofiles.artistAdd');
     if( $rc['stat'] != 'ok' ) {
         return $rc;
+    }
+
+    //
+    // If not specified, setup the sort name
+    //
+    if( !isset($args['sort_name']) || $args['sort_name'] == '' ) {
+        $args['sort_name'] = $args['name'];
     }
 
     //

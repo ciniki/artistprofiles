@@ -173,6 +173,7 @@ function ciniki_artistprofiles_main() {
             'general':{'label':'Service', 'aside':'yes', 'fields':{
                 'name':{'label':'Name', 'type':'text'},
                 'subname':{'label':'Sub Name', 'type':'text'},
+                'sort_name':{'label':'Sort Name', 'type':'text'},
                 'status':{'label':'Status', 'type':'toggle', 'toggles':this.artistStatuses},
                 'flags':{'label':'Options', 'type':'flags', 'join':'yes', 'flags':this.artistFlags},
                 }}, 

@@ -21,7 +21,7 @@ function ciniki_artistprofiles_objects($ciniki) {
         'fields'=>array(
             'name'=>array('name'=>'Name'),
             'subname'=>array('name'=>'Name', 'default'=>''),
-            'sort_name'=>array('name'=>'Sort Name'),
+            'sort_name'=>array('name'=>'Sort Name', 'default'=>''),
             'permalink'=>array('name'=>'Permalink'),
             'status'=>array('name'=>'Status'),
             'flags'=>array('name'=>'Options'),
