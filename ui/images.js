@@ -93,7 +93,7 @@ function ciniki_artistprofiles_images() {
         } else {
             this.edit.reset();
             this.edit.sections._buttons.buttons.delete.visible = 'no';
-            this.edit.data = {};
+            this.edit.data = {'flags':1};
             this.edit.refresh();
             this.edit.show(cb);
         }

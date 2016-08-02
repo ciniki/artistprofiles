@@ -61,7 +61,7 @@ function ciniki_artistprofiles_imageGet($ciniki) {
             'artist_id'=>'',
             'name'=>'',
             'permalink'=>'',
-            'flags'=>'0',
+            'flags'=>1,
             'image_id'=>'0',
             'description'=>'',
         );
