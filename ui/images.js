@@ -3,7 +3,7 @@
 //
 function ciniki_artistprofiles_images() {
     this.imageFlags = {
-        '1':{'name':'Hidden'},
+        '1':{'name':'Visible'},
         };
     this.init = function() {
         //
