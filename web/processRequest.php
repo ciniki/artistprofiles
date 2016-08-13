@@ -127,7 +127,7 @@ function ciniki_artistprofiles_web_processRequest(&$ciniki, $settings, $business
         //
         // Display list as thumbnails
         //
-        $strsql = "SELECT id, name, permalink, primary_image_id AS image_id "
+        $strsql = "SELECT id, name, subname, permalink, primary_image_id AS image_id "
             . "FROM ciniki_artistprofiles "
             . "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
             . "AND status = 10 "
