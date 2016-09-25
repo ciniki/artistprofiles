@@ -43,7 +43,6 @@ function ciniki_artistprofiles_hooks_uiSettings($ciniki, $business_id, $args) {
     //
     if( ciniki_core_checkModuleFlags($ciniki, 'ciniki.artistprofiles', 0x01) 
         && (isset($args['permissions']['owners'])
-            || isset($args['permissions']['employees'])
             || isset($args['permissions']['resellers'])
             || ($ciniki['session']['user']['perms']&0x01) == 0x01
             )
