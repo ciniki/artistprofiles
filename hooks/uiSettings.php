@@ -17,7 +17,7 @@ function ciniki_artistprofiles_hooks_uiSettings($ciniki, $business_id, $args) {
     //
     // Setup the default response
     //
-    $rsp = array('stat'=>'ok', 'menu_items'=>array());
+    $rsp = array('stat'=>'ok', 'menu_items'=>array(), 'settings_menu_items'=>array());
 
     //
     // Check permissions for what menu items should be available
@@ -35,7 +35,21 @@ function ciniki_artistprofiles_hooks_uiSettings($ciniki, $business_id, $args) {
             'edit'=>array('app'=>'ciniki.artistprofiles.main'),
             );
         $rsp['menu_items'][] = $menu_item;
+
     } 
+
+    //
+    // Check if Dropbox has been enabled
+    //
+    if( ciniki_core_checkModuleFlags($ciniki, 'ciniki.artistprofiles', 0x01) 
+        && (isset($args['permissions']['owners'])
+            || isset($args['permissions']['employees'])
+            || isset($args['permissions']['resellers'])
+            || ($ciniki['session']['user']['perms']&0x01) == 0x01
+            )
+        ) {
+        $rsp['settings_menu_items'][] = array('priority'=>3700, 'label'=>'Artist Profiles', 'edit'=>array('app'=>'ciniki.artistprofiles.settings'));
+    }
 
     return $rsp;
 }
