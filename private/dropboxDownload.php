@@ -448,6 +448,12 @@ function ciniki_artistprofiles_dropboxDownload(&$ciniki, $business_id) {
                 return $rc;
             }
         }
+        
+        //
+        // Update the web index if enabled
+        //
+        ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'hookExec');
+        ciniki_core_hookExec($ciniki, $business_id, 'ciniki', 'web', 'indexObject', array('object'=>'ciniki.artistprofiles.artist', 'object_id'=>$artist_id));
 
         //  
         // Commit the changes
