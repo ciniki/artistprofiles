@@ -248,7 +248,7 @@ function ciniki_artistprofiles_web_processRequest(&$ciniki, $settings, $business
                 }
                 // Add gallery
                 if( isset($artist['images']) 
-                    && (($artist['primary_image_id'] > 0 && count($artist['images']) > 1 ) || ($artist['primary_image_id'] == 0 && count($artist['images']) > 0)) ) {
+                    && (($artist['primary_image_id'] > 0 && count($artist['images']) > 0 ) || ($artist['primary_image_id'] == 0 && count($artist['images']) > 0)) ) {
                     $page['blocks'][] = array('type'=>'gallery', 'title'=>'Additional Images', 'section'=>'additional-images', 'base_url'=>$base_url . '/gallery', 'images'=>$artist['images']);
                 }
             }
