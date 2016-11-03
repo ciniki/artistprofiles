@@ -51,7 +51,7 @@ function ciniki_artistprofiles_artistLoad($ciniki, $business_id, $artist_id, $ar
         return $rc;
     }
     if( !isset($rc['artists'][0]['artist']) ) {
-        return array('stat'=>'ok', 'err'=>array('pkg'=>'ciniki', 'code'=>'2859', 'msg'=>'Unable to find artist'));
+        return array('stat'=>'ok', 'err'=>array('code'=>'ciniki.artistprofiles.7', 'msg'=>'Unable to find artist'));
     }
     $artist = $rc['artists'][0]['artist'];
     $artist_id = $artist['id']; // Incase this function was called with permalink

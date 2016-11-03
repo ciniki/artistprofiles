@@ -47,7 +47,7 @@ function ciniki_artistprofiles_imageAdd(&$ciniki) {
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbUUID');
     $rc = ciniki_core_dbUUID($ciniki, 'ciniki.artistprofiles');
     if( $rc['stat'] != 'ok' ) {
-        return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'2890', 'msg'=>'Unable to get a new UUID', 'err'=>$rc['err']));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.artistprofiles.22', 'msg'=>'Unable to get a new UUID', 'err'=>$rc['err']));
     }
     $args['uuid'] = $rc['uuid'];
 
@@ -77,7 +77,7 @@ function ciniki_artistprofiles_imageAdd(&$ciniki) {
         return $rc;
     }
     if( $rc['num_rows'] > 0 ) {
-        return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'2892', 'msg'=>'You already have an image with this name, please choose another name'));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.artistprofiles.23', 'msg'=>'You already have an image with this name, please choose another name'));
     }
 
     //

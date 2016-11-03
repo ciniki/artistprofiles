@@ -41,7 +41,7 @@ function ciniki_artistprofiles_dropboxDownload(&$ciniki, $business_id) {
     //
     if( !isset($ciniki['business']['modules']['ciniki.artistprofiles']['flags'])
         || ($ciniki['business']['modules']['ciniki.artistprofiles']['flags']&0x01) == 0 ) {
-        return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'2857', 'msg'=>'Dropbox integration not enabled'));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.artistprofiles.11', 'msg'=>'Dropbox integration not enabled'));
     }
 
     //
@@ -54,7 +54,7 @@ function ciniki_artistprofiles_dropboxDownload(&$ciniki, $business_id) {
         return $rc;
     }
     if( !isset($rc['settings']['dropbox-artistprofiles']) || $rc['settings']['dropbox-artistprofiles'] == '') {
-        return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'2853', 'msg'=>'Dropbox artistprofiles not setup.'));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.artistprofiles.12', 'msg'=>'Dropbox artistprofiles not setup.'));
     }
     $artistprofiles = $rc['settings']['dropbox-artistprofiles'];
     if( $artistprofiles[0] != '/' ) {
@@ -87,7 +87,7 @@ function ciniki_artistprofiles_dropboxDownload(&$ciniki, $business_id) {
     if( !isset($rc['settings']['apis-dropbox-access-token']) 
         || $rc['settings']['apis-dropbox-access-token'] == ''
         ) {
-        return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'2854', 'msg'=>'Dropbox not configured.'));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.artistprofiles.13', 'msg'=>'Dropbox not configured.'));
     }
     $access_token = $rc['settings']['apis-dropbox-access-token'];
 
@@ -250,7 +250,7 @@ function ciniki_artistprofiles_dropboxDownload(&$ciniki, $business_id) {
             }
             if( isset($rc['num_rows']) && $rc['num_rows'] > 0 ) {
                 ciniki_core_dbTransactionRollback($ciniki, 'ciniki.artistprofiles');
-                return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'2855', 'msg'=>'Directory artist already exists for ' . $sort_name));
+                return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.artistprofiles.14', 'msg'=>'Directory artist already exists for ' . $sort_name));
             }
             
             // 

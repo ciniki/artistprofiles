@@ -83,10 +83,10 @@ function ciniki_artistprofiles_linkGet($ciniki) {
         ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQuery');
         $rc = ciniki_core_dbHashQuery($ciniki, $strsql, 'ciniki.artistprofiles', 'link');
         if( $rc['stat'] != 'ok' ) {
-            return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'2910', 'msg'=>'Link not found', 'err'=>$rc['err']));
+            return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.artistprofiles.30', 'msg'=>'Link not found', 'err'=>$rc['err']));
         }
         if( !isset($rc['link']) ) {
-            return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'2911', 'msg'=>'Unable to find Link'));
+            return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.artistprofiles.31', 'msg'=>'Unable to find Link'));
         }
         $link = $rc['link'];
     }

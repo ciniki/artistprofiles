@@ -15,11 +15,11 @@
 function ciniki_artistprofiles_hooks_webIndexObject($ciniki, $business_id, $args) {
 
     if( !isset($args['object']) || $args['object'] == '' ) {
-        return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'3275', 'msg'=>'No object specified'));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.artistprofiles.2', 'msg'=>'No object specified'));
     }
 
     if( !isset($args['object_id']) || $args['object_id'] == '' ) {
-        return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'3276', 'msg'=>'No object ID specified'));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.artistprofiles.3', 'msg'=>'No object ID specified'));
     }
 
     //
@@ -40,10 +40,10 @@ function ciniki_artistprofiles_hooks_webIndexObject($ciniki, $business_id, $args
             . "";
         $rc = ciniki_core_dbHashQuery($ciniki, $strsql, 'ciniki.artistprofiles', 'item');
         if( $rc['stat'] != 'ok' ) {
-            return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'3280', 'msg'=>'Object not found'));
+            return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.artistprofiles.4', 'msg'=>'Object not found'));
         }
         if( !isset($rc['item']) ) {
-            return array('stat'=>'noexist', 'err'=>array('pkg'=>'ciniki', 'code'=>'3281', 'msg'=>'Object not found'));
+            return array('stat'=>'noexist', 'err'=>array('code'=>'ciniki.artistprofiles.5', 'msg'=>'Object not found'));
         }
 
         //

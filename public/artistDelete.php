@@ -51,7 +51,7 @@ function ciniki_artistprofiles_artistDelete(&$ciniki) {
         return $rc;
     }
     if( !isset($rc['artist']) ) {
-        return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'2881', 'msg'=>'Airlock does not exist.'));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.artistprofiles.17', 'msg'=>'Airlock does not exist.'));
     }
     $artist = $rc['artist'];
 

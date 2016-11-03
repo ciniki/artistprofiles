@@ -19,7 +19,7 @@
 function ciniki_artistprofiles_web_subMenuItems(&$ciniki, $settings, $business_id, $args) {
     
     if( !isset($ciniki['business']['modules']['ciniki.artistprofiles']) ) {
-        return array('stat'=>'404', 'err'=>array('pkg'=>'ciniki', 'code'=>'3040', 'msg'=>"I'm sorry, the file you requested does not exist."));
+        return array('stat'=>'404', 'err'=>array('code'=>'ciniki.artistprofiles.36', 'msg'=>"I'm sorry, the file you requested does not exist."));
     }
 
     //

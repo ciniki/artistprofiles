@@ -124,10 +124,10 @@ function ciniki_artistprofiles_artistGet($ciniki) {
                  ),
             ));
         if( $rc['stat'] != 'ok' ) {
-            return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'2883', 'msg'=>'Artist not found', 'err'=>$rc['err']));
+            return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.artistprofiles.18', 'msg'=>'Artist not found', 'err'=>$rc['err']));
         }
         if( !isset($rc['artists'][0]['artist']) ) {
-            return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'2884', 'msg'=>'Unable to find Artist'));
+            return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.artistprofiles.19', 'msg'=>'Unable to find Artist'));
         }
         $artist = $rc['artists'][0]['artist'];
 
@@ -258,7 +258,7 @@ function ciniki_artistprofiles_artistGet($ciniki) {
         ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'tagsList');
         $rc = ciniki_core_tagsList($ciniki, 'ciniki.artistprofiles', $args['business_id'], 'ciniki_artistprofiles_tags', 10);
         if( $rc['stat'] != 'ok' ) {
-            return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'2668', 'msg'=>'Unable to get list of categories', 'err'=>$rc['err']));
+            return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.artistprofiles.20', 'msg'=>'Unable to get list of categories', 'err'=>$rc['err']));
         }
         if( isset($rc['tags']) ) {
             $rsp['categories'] = $rc['tags'];

@@ -85,10 +85,10 @@ function ciniki_artistprofiles_imageGet($ciniki) {
         ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQuery');
         $rc = ciniki_core_dbHashQuery($ciniki, $strsql, 'ciniki.artistprofiles', 'image');
         if( $rc['stat'] != 'ok' ) {
-            return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'2885', 'msg'=>'Image not found', 'err'=>$rc['err']));
+            return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.artistprofiles.25', 'msg'=>'Image not found', 'err'=>$rc['err']));
         }
         if( !isset($rc['image']) ) {
-            return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'2886', 'msg'=>'Unable to find Image'));
+            return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.artistprofiles.26', 'msg'=>'Unable to find Image'));
         }
         $image = $rc['image'];
     }

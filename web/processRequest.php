@@ -19,7 +19,7 @@
 function ciniki_artistprofiles_web_processRequest(&$ciniki, $settings, $business_id, $args) {
 
     if( !isset($ciniki['business']['modules']['ciniki.artistprofiles']) ) {
-        return array('stat'=>'404', 'err'=>array('pkg'=>'ciniki', 'code'=>'3041', 'msg'=>"I'm sorry, the page you requested does not exist."));
+        return array('stat'=>'404', 'err'=>array('code'=>'ciniki.artistprofiles.32', 'msg'=>"I'm sorry, the page you requested does not exist."));
     }
     $page = array(
         'title'=>$args['page_title'],
@@ -191,10 +191,10 @@ function ciniki_artistprofiles_web_processRequest(&$ciniki, $settings, $business
             return $rc;
         }
         if( isset($rc['artist']) && $rc['artist']['status'] != 10 ) {
-            return array('stat'=>'404', 'err'=>array('pkg'=>'ciniki', 'code'=>'3038', 'msg'=>"We're sorry, the page you requested is not available."));
+            return array('stat'=>'404', 'err'=>array('code'=>'ciniki.artistprofiles.33', 'msg'=>"We're sorry, the page you requested is not available."));
         }
         if( !isset($rc['artist']) ) {
-            return array('stat'=>'404', 'err'=>array('pkg'=>'ciniki', 'code'=>'3043', 'msg'=>"We're sorry, the page you requested is not available."));
+            return array('stat'=>'404', 'err'=>array('code'=>'ciniki.artistprofiles.34', 'msg'=>"We're sorry, the page you requested is not available."));
         } else {
             $artist = $rc['artist'];
             $page['title'] = $artist['name'];
@@ -259,7 +259,7 @@ function ciniki_artistprofiles_web_processRequest(&$ciniki, $settings, $business
     // Return error if nothing found to display
     //
     else {
-        return array('stat'=>'404', 'err'=>array('pkg'=>'ciniki', 'code'=>'3044', 'msg'=>"We're sorry, the page you requested is not available."));
+        return array('stat'=>'404', 'err'=>array('code'=>'ciniki.artistprofiles.35', 'msg'=>"We're sorry, the page you requested is not available."));
     }
 
     //
