@@ -42,7 +42,7 @@ function ciniki_artistprofiles_cron_jobs(&$ciniki) {
         //
         $rc = ciniki_businesses_checkModuleAccess($ciniki, $business['business_id'], 'ciniki', 'artistprofiles');
         if( $rc['stat'] != 'ok' ) { 
-            ciniki_cron_logMsg($ciniki, $business['business_id'], array('code'=>'2879', 'msg'=>'ciniki.artistprofiles not configured', 
+            ciniki_cron_logMsg($ciniki, $business['business_id'], array('code'=>'ciniki.artistprofiles.37', 'msg'=>'ciniki.artistprofiles not configured', 
                 'severity'=>30, 'err'=>$rc['err']));
             continue;
         }
@@ -54,7 +54,7 @@ function ciniki_artistprofiles_cron_jobs(&$ciniki) {
         //
         $rc = ciniki_artistprofiles_dropboxDownload($ciniki, $business['business_id']);
         if( $rc['stat'] != 'ok' ) {
-            ciniki_cron_logMsg($ciniki, $business['business_id'], array('code'=>'2878', 'msg'=>'Unable to update artistprofiles', 
+            ciniki_cron_logMsg($ciniki, $business['business_id'], array('code'=>'ciniki.artistprofiles.38', 'msg'=>'Unable to update artistprofiles', 
                 'severity'=>50, 'err'=>$rc['err']));
             continue;
         }
