@@ -197,6 +197,29 @@ function ciniki_artistprofiles_web_processRequest(&$ciniki, $settings, $business
             return array('stat'=>'404', 'err'=>array('code'=>'ciniki.artistprofiles.34', 'msg'=>"We're sorry, the page you requested is not available."));
         } else {
             $artist = $rc['artist'];
+            
+            //
+            // Add the primary image to the secondary image list
+            //
+            $primary_image_permalink = '';
+            if( isset($artist['primary_image_id']) && $artist['primary_image_id'] > 0 ) {
+                if( isset($artist['images']) && count($artist['images']) > 0 ) {
+                    foreach($artist['images'] as $img) {
+                        if( $img['image_id'] == $artist['primary_image_id'] ) {
+                            $primary_image_permalink = 'gallery/' . $img['permalink'];
+                            break;
+                        }
+                    }
+                }
+                if( $primary_image_permalink == '' ) {
+                    $primary_image_permalink = 'gallery/primary';
+                    if( !isset($artist['images']) ) {
+                        $artist['images'] = array();
+                    }
+                    $artist['images'][] = array('id'=>0, 'permalink'=>'primary', 'title'=>'', 'image_id'=>$artist['primary_image_id'], 'description'=>'', 'flags'=>1);
+                }
+            }
+
             $page['title'] = $artist['name'];
             if( isset($artist['subname']) && $artist['subname'] != '' ) {
                 $page['subtitle'] = $artist['subname'];
@@ -224,11 +247,14 @@ function ciniki_artistprofiles_web_processRequest(&$ciniki, $settings, $business
                         $block['next'] = array('url'=>$base_url . '/gallery/' . $rc['next']['permalink'], 'image_id'=>$rc['next']['image_id']);
                     }
                     $page['blocks'][] = $block;
-                    $page['blocks'][] = array('type'=>'gallery', 'title'=>'Additional Images', 'section'=>'gallery-images', 'base_url'=>$base_url . '/gallery', 'images'=>$artist['images']);
+                    if( count($artist['images']) > 1 ) {
+                        $page['blocks'][] = array('type'=>'gallery', 'title'=>'Additional Images', 'section'=>'gallery-images', 'base_url'=>$base_url . '/gallery', 'images'=>$artist['images']);
+                    }
                 }
             } else {
                 if( isset($artist['primary_image_id']) && $artist['primary_image_id'] > 0 ) {
                     $page['blocks'][] = array('type'=>'image', 'section'=>'primary-image', 'primary'=>'yes', 'image_id'=>$artist['primary_image_id'], 
+                        'base_url'=>$base_url, 'permalink'=>$primary_image_permalink,
                         'title'=>$artist['name'], 'caption'=>$artist['primary_image_caption']);
                 }
                 if( isset($artist['description']) && $artist['description'] != '' ) {
@@ -248,7 +274,7 @@ function ciniki_artistprofiles_web_processRequest(&$ciniki, $settings, $business
                 }
                 // Add gallery
                 if( isset($artist['images']) 
-                    && (($artist['primary_image_id'] > 0 && count($artist['images']) > 0 ) || ($artist['primary_image_id'] == 0 && count($artist['images']) > 0)) ) {
+                    && (($artist['primary_image_id'] > 0 && count($artist['images']) > 1 ) || ($artist['primary_image_id'] == 0 && count($artist['images']) > 0)) ) {
                     $page['blocks'][] = array('type'=>'gallery', 'title'=>'Additional Images', 'section'=>'additional-images', 'base_url'=>$base_url . '/gallery', 'images'=>$artist['images']);
                 }
             }
