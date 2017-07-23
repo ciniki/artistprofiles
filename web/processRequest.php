@@ -174,7 +174,6 @@ function ciniki_artistprofiles_web_processRequest(&$ciniki, $settings, $business
         } else {
             $page['blocks'][] = array('type'=>'tradingcards', 'base_url'=>$base_url, 'cards'=>$rc['rows']);
         }
-
     }
 
     elseif( $display == 'categories' ) {
