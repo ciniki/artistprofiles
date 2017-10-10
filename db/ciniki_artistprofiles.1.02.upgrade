@@ -1,0 +1,5 @@
+#
+# Increase size of description
+#
+ALTER TABLE ciniki_artistprofiles MODIFY description text not null;
+ALTER TABLE ciniki_artistprofiles COMMENT='v1.02';

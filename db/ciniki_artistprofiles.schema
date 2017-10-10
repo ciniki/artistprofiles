@@ -53,7 +53,7 @@ create table ciniki_artistprofiles (
     primary_image_id int not null,
     primary_image_caption varchar(250) not null,
     synopsis varchar(2000) not null,
-    description varchar(20000) not null,
+    description text not null,
     setup_image_id int not null,
     setup_image_caption varchar(250) not null,
     setup_description varchar(10000) not null,
@@ -62,4 +62,4 @@ create table ciniki_artistprofiles (
     primary key (id),
     unique index (uuid),
     index sync (business_id, uuid, last_updated)
-) ENGINE='InnoDB', COMMENT='v1.01';
+) ENGINE='InnoDB', COMMENT='v1.02';
