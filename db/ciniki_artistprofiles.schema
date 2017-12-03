@@ -62,4 +62,4 @@ create table ciniki_artistprofiles (
     primary key (id),
     unique index (uuid),
     index sync (business_id, uuid, last_updated)
-) ENGINE='InnoDB', COMMENT='v1.01';
+) ENGINE='InnoDB', COMMENT='v1.02';
