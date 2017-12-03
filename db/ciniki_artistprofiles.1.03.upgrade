@@ -1,0 +1,6 @@
+#
+# Update the row size for UTF-8
+#
+ALTER TABLE ciniki_artistprofiles MODIFY description text not null;
+ALTER TABLE ciniki_artistprofiles MODIFY setup_description text not null;
+ALTER TABLE ciniki_artistprofiles COMMENT='v1.03';
