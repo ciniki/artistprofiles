@@ -7,12 +7,12 @@
 // Arguments
 // ---------
 // ciniki:
-// business_id:     The ID of the business to get events for.
+// tnid:     The ID of the tenant to get events for.
 //
 // Returns
 // -------
 //
-function ciniki_artistprofiles_hooks_webIndexList($ciniki, $business_id, $args) {
+function ciniki_artistprofiles_hooks_webIndexList($ciniki, $tnid, $args) {
 
     $objects = array();
 
@@ -21,7 +21,7 @@ function ciniki_artistprofiles_hooks_webIndexList($ciniki, $business_id, $args) 
     //
     $strsql = "SELECT CONCAT('ciniki.artistprofiles.artist.', id) AS oid, 'ciniki.artistprofiles.artist' AS object, id AS object_id "
         . "FROM ciniki_artistprofiles "
-        . "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
+        . "WHERE tnid = '" . ciniki_core_dbQuote($ciniki, $tnid) . "' "
         . "AND status = 10 "
         . "";
     $rc = ciniki_core_dbHashQueryIDTree($ciniki, $strsql, 'ciniki.artistprofiles', array(

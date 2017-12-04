@@ -2,13 +2,13 @@
 //
 // Description
 // -----------
-// This method will turn the artistprofiles settings for a business.
+// This method will turn the artistprofiles settings for a tenant.
 //
 // Arguments
 // ---------
 // api_key:
 // auth_token:
-// business_id:     The ID of the business to get the ATDO settings for.
+// tnid:     The ID of the tenant to get the ATDO settings for.
 // 
 // Returns
 // -------
@@ -19,7 +19,7 @@ function ciniki_artistprofiles_settingsGet($ciniki) {
     //  
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'prepareArgs');
     $rc = ciniki_core_prepareArgs($ciniki, 'no', array(
-        'business_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Business'), 
+        'tnid'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Tenant'), 
         )); 
     if( $rc['stat'] != 'ok' ) { 
         return $rc;
@@ -28,19 +28,19 @@ function ciniki_artistprofiles_settingsGet($ciniki) {
     
     //  
     // Make sure this module is activated, and
-    // check permission to run this function for this business
+    // check permission to run this function for this tenant
     //  
     ciniki_core_loadMethod($ciniki, 'ciniki', 'artistprofiles', 'private', 'checkAccess');
-    $rc = ciniki_artistprofiles_checkAccess($ciniki, $args['business_id'], 'ciniki.artistprofiles.settingsGet'); 
+    $rc = ciniki_artistprofiles_checkAccess($ciniki, $args['tnid'], 'ciniki.artistprofiles.settingsGet'); 
     if( $rc['stat'] != 'ok' ) { 
         return $rc;
     }   
     
     //
-    // Grab the settings for the business from the database
+    // Grab the settings for the tenant from the database
     //
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbDetailsQuery');
-    $rc = ciniki_core_dbDetailsQuery($ciniki, 'ciniki_artistprofiles_settings', 'business_id', $args['business_id'], 'ciniki.artistprofiles', 'settings', '');
+    $rc = ciniki_core_dbDetailsQuery($ciniki, 'ciniki_artistprofiles_settings', 'tnid', $args['tnid'], 'ciniki.artistprofiles', 'settings', '');
     if( $rc['stat'] != 'ok' ) {
         return $rc;
     }

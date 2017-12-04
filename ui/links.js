@@ -27,7 +27,7 @@ function ciniki_artistprofiles_links() {
             };
         this.edit.fieldValue = function(s, i, d) { return this.data[i]; }
         this.edit.fieldHistoryArgs = function(s, i) {
-            return {'method':'ciniki.artistprofiles.linkHistory', 'args':{'business_id':M.curBusinessID, 
+            return {'method':'ciniki.artistprofiles.linkHistory', 'args':{'tnid':M.curTenantID, 
                 'link_id':this.link_id, 'field':i}};
         };
         this.edit.addButton('save', 'Save', 'M.ciniki_artistprofiles_links.saveLink();');
@@ -67,7 +67,7 @@ function ciniki_artistprofiles_links() {
         if( this.edit.link_id > 0 ) {
             this.edit.reset();
             this.edit.sections._buttons.buttons.delete.visible = 'yes';
-            M.api.getJSONCb('ciniki.artistprofiles.linkGet', {'business_id':M.curBusinessID, 'link_id':this.edit.link_id}, function(rsp) {
+            M.api.getJSONCb('ciniki.artistprofiles.linkGet', {'tnid':M.curTenantID, 'link_id':this.edit.link_id}, function(rsp) {
                 if( rsp.stat != 'ok' ) {
                     M.api.err(rsp);
                     return false;
@@ -90,7 +90,7 @@ function ciniki_artistprofiles_links() {
         if( this.edit.link_id > 0 ) {
             var c = this.edit.serializeForm('no');
             if( c != '' ) {
-                M.api.postJSONCb('ciniki.artistprofiles.linkUpdate', {'business_id':M.curBusinessID, 'link_id':this.edit.link_id}, c, function(rsp) {
+                M.api.postJSONCb('ciniki.artistprofiles.linkUpdate', {'tnid':M.curTenantID, 'link_id':this.edit.link_id}, c, function(rsp) {
                     if( rsp.stat != 'ok' ) {
                         M.api.err(rsp);
                         return false;
@@ -103,7 +103,7 @@ function ciniki_artistprofiles_links() {
         } else {
             var c = this.edit.serializeForm('yes');
             if( c != '' ) {
-                M.api.postJSONCb('ciniki.artistprofiles.linkAdd', {'business_id':M.curBusinessID, 'artist_id':this.edit.artist_id}, c, function(rsp) {
+                M.api.postJSONCb('ciniki.artistprofiles.linkAdd', {'tnid':M.curTenantID, 'artist_id':this.edit.artist_id}, c, function(rsp) {
                     if( rsp.stat != 'ok' ) {
                         M.api.err(rsp);
                         return false;
@@ -118,7 +118,7 @@ function ciniki_artistprofiles_links() {
 
     this.deleteLink = function() {
         if( confirm("Are you sure you want to remove this link?") ) {
-            M.api.getJSONCb('ciniki.artistprofiles.linkDelete', {'business_id':M.curBusinessID, 'link_id':this.edit.link_id}, function(rsp) {
+            M.api.getJSONCb('ciniki.artistprofiles.linkDelete', {'tnid':M.curTenantID, 'link_id':this.edit.link_id}, function(rsp) {
                 if( rsp.stat != 'ok' ) {
                     M.api.err(rsp);
                     return false;

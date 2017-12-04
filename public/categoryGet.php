@@ -2,13 +2,13 @@
 //
 // Description
 // -----------
-// This method will turn the artistprofiles settings for a business.
+// This method will turn the artistprofiles settings for a tenant.
 //
 // Arguments
 // ---------
 // api_key:
 // auth_token:
-// business_id:     The ID of the business to get the ATDO settings for.
+// tnid:     The ID of the tenant to get the ATDO settings for.
 // 
 // Returns
 // -------
@@ -19,7 +19,7 @@ function ciniki_artistprofiles_categoryGet($ciniki) {
     //  
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'prepareArgs');
     $rc = ciniki_core_prepareArgs($ciniki, 'no', array(
-        'business_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Business'), 
+        'tnid'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Tenant'), 
         'category'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Category'), 
         )); 
     if( $rc['stat'] != 'ok' ) { 
@@ -29,20 +29,20 @@ function ciniki_artistprofiles_categoryGet($ciniki) {
     
     //  
     // Make sure this module is activated, and
-    // check permission to run this function for this business
+    // check permission to run this function for this tenant
     //  
     ciniki_core_loadMethod($ciniki, 'ciniki', 'artistprofiles', 'private', 'checkAccess');
-    $rc = ciniki_artistprofiles_checkAccess($ciniki, $args['business_id'], 'ciniki.artistprofiles.categoryGet'); 
+    $rc = ciniki_artistprofiles_checkAccess($ciniki, $args['tnid'], 'ciniki.artistprofiles.categoryGet'); 
     if( $rc['stat'] != 'ok' ) { 
         return $rc;
     }   
     
     //
-    // Grab the settings for the business from the database
+    // Grab the settings for the tenant from the database
     //
     $strsql = "SELECT detail_key, detail_value "
         . "FROM ciniki_artistprofiles_settings "
-        . "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+        . "WHERE tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
         . "AND detail_key LIKE 'tag-category-%-" . ciniki_core_dbQuote($ciniki, $args['category']) . "' "
         . "";
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbQueryList2');

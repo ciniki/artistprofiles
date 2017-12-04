@@ -38,7 +38,7 @@ function ciniki_artistprofiles_images() {
             return ''; 
         };
         this.edit.fieldHistoryArgs = function(s, i) {
-            return {'method':'ciniki.artistprofiles.imageHistory', 'args':{'business_id':M.curBusinessID, 
+            return {'method':'ciniki.artistprofiles.imageHistory', 'args':{'tnid':M.curTenantID, 
                 'artist_image_id':this.artist_image_id, 'field':i}};
         };
         this.edit.addDropImage = function(iid) {
@@ -81,7 +81,7 @@ function ciniki_artistprofiles_images() {
             this.edit.reset();
             this.edit.sections._buttons.buttons.delete.visible = 'yes';
             var rsp = M.api.getJSONCb('ciniki.artistprofiles.imageGet', 
-                {'business_id':M.curBusinessID, 'artist_image_id':this.edit.artist_image_id}, function(rsp) {
+                {'tnid':M.curTenantID, 'artist_image_id':this.edit.artist_image_id}, function(rsp) {
                     if( rsp.stat != 'ok' ) {
                         M.api.err(rsp);
                         return false;
@@ -104,7 +104,7 @@ function ciniki_artistprofiles_images() {
             var c = this.edit.serializeFormData('no');
             if( c != '' ) {
                 var rsp = M.api.postJSONFormData('ciniki.artistprofiles.imageUpdate', 
-                    {'business_id':M.curBusinessID, 
+                    {'tnid':M.curTenantID, 
                     'artist_image_id':this.edit.artist_image_id}, c,
                         function(rsp) {
                             if( rsp.stat != 'ok' ) {
@@ -120,7 +120,7 @@ function ciniki_artistprofiles_images() {
         } else {
             var c = this.edit.serializeFormData('yes');
             var rsp = M.api.postJSONFormData('ciniki.artistprofiles.imageAdd', 
-                {'business_id':M.curBusinessID, 'artist_id':this.edit.artist_id}, c,
+                {'tnid':M.curTenantID, 'artist_id':this.edit.artist_id}, c,
                     function(rsp) {
                         if( rsp.stat != 'ok' ) {
                             M.api.err(rsp);
@@ -134,7 +134,7 @@ function ciniki_artistprofiles_images() {
 
     this.deleteImage = function() {
         if( confirm('Are you sure you want to delete this image?') ) {
-            var rsp = M.api.getJSONCb('ciniki.artistprofiles.imageDelete', {'business_id':M.curBusinessID, 
+            var rsp = M.api.getJSONCb('ciniki.artistprofiles.imageDelete', {'tnid':M.curTenantID, 
                 'artist_image_id':this.edit.artist_image_id}, function(rsp) {
                     if( rsp.stat != 'ok' ) {
                         M.api.err(rsp);

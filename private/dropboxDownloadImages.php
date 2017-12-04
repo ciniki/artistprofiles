@@ -6,7 +6,7 @@
 // Arguments
 // ---------
 // ciniki:
-// business_id:         The business ID to check the session user against.
+// tnid:         The tenant ID to check the session user against.
 // method:              The requested method.
 //
 // Returns
@@ -16,7 +16,7 @@
 //require_once($ciniki['config']['ciniki.core']['lib_dir'] . '/dropbox/lib/Dropbox/autoload.php');
 //use \Dropbox as dbx;
 
-function ciniki_artistprofiles_dropboxDownloadImages(&$ciniki, $business_id, $client, $artist, $details) {
+function ciniki_artistprofiles_dropboxDownloadImages(&$ciniki, $tnid, $client, $artist, $details) {
 
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'objectAdd');
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'objectUpdate');
@@ -25,7 +25,7 @@ function ciniki_artistprofiles_dropboxDownloadImages(&$ciniki, $business_id, $cl
     foreach($details as $img) {
         $flags = 0x01;  // Visible on website
         if( $img['mime_type'] == 'image/jpeg' ) {
-            $rc = ciniki_images_insertFromDropbox($ciniki, $business_id, $ciniki['session']['user']['id'], $client, $img['path'], 1, '', '', 'no');
+            $rc = ciniki_images_insertFromDropbox($ciniki, $tnid, $ciniki['session']['user']['id'], $client, $img['path'], 1, '', '', 'no');
             if( $rc['stat'] != 'ok' && $rc['stat'] != 'exists' ) {
                 return $rc;
             }
@@ -49,7 +49,7 @@ function ciniki_artistprofiles_dropboxDownloadImages(&$ciniki, $business_id, $cl
                 }
                 $uuid = $rc['uuid'];
                 // Add object
-                $rc = ciniki_core_objectAdd($ciniki, $business_id, 'ciniki.artistprofiles.image', array(
+                $rc = ciniki_core_objectAdd($ciniki, $tnid, 'ciniki.artistprofiles.image', array(
                     'uuid'=>$uuid,
                     'artist_id'=>$artist['id'],
                     'name'=>'',

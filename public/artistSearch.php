@@ -2,13 +2,13 @@
 //
 // Description
 // -----------
-// This method will return the list of Artists for a business.
+// This method will return the list of Artists for a tenant.
 //
 // Arguments
 // ---------
 // api_key:
 // auth_token:
-// business_id:        The ID of the business to get Artist for.
+// tnid:        The ID of the tenant to get Artist for.
 //
 // Returns
 // -------
@@ -19,7 +19,7 @@ function ciniki_artistprofiles_artistSearch($ciniki) {
     //
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'prepareArgs');
     $rc = ciniki_core_prepareArgs($ciniki, 'no', array(
-        'business_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Business'),
+        'tnid'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Tenant'),
         'start_needle'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Search String'), 
         'limit'=>array('required'=>'no', 'blank'=>'no', 'default'=>'15', 'name'=>'Limit'), 
         ));
@@ -29,10 +29,10 @@ function ciniki_artistprofiles_artistSearch($ciniki) {
     $args = $rc['args'];
 
     //
-    // Check access to business_id as owner, or sys admin.
+    // Check access to tnid as owner, or sys admin.
     //
     ciniki_core_loadMethod($ciniki, 'ciniki', 'artistprofiles', 'private', 'checkAccess');
-    $rc = ciniki_artistprofiles_checkAccess($ciniki, $args['business_id'], 'ciniki.artistprofiles.artistSearch');
+    $rc = ciniki_artistprofiles_checkAccess($ciniki, $args['tnid'], 'ciniki.artistprofiles.artistSearch');
     if( $rc['stat'] != 'ok' ) {
         return $rc;
     }
@@ -47,7 +47,7 @@ function ciniki_artistprofiles_artistSearch($ciniki) {
         . "ciniki_artistprofiles.status, "
         . "ciniki_artistprofiles.flags "
         . "FROM ciniki_artistprofiles "
-        . "WHERE ciniki_artistprofiles.business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+        . "WHERE ciniki_artistprofiles.tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
         . "AND (name like '" . ciniki_core_dbQuote($ciniki, $args['start_needle']) . "%' "
             . "OR name like '% " . ciniki_core_dbQuote($ciniki, $args['start_needle']) . "%' "
             . ") "

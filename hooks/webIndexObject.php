@@ -7,12 +7,12 @@
 // Arguments
 // ---------
 // ciniki:
-// business_id:     The ID of the business to get events for.
+// tnid:     The ID of the tenant to get events for.
 //
 // Returns
 // -------
 //
-function ciniki_artistprofiles_hooks_webIndexObject($ciniki, $business_id, $args) {
+function ciniki_artistprofiles_hooks_webIndexObject($ciniki, $tnid, $args) {
 
     if( !isset($args['object']) || $args['object'] == '' ) {
         return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.artistprofiles.2', 'msg'=>'No object specified'));
@@ -35,7 +35,7 @@ function ciniki_artistprofiles_hooks_webIndexObject($ciniki, $business_id, $args
         $strsql = "SELECT id, name, subname, sort_name, permalink, status, "
             . "primary_image_id, synopsis, description "
             . "FROM ciniki_artistprofiles "
-            . "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
+            . "WHERE tnid = '" . ciniki_core_dbQuote($ciniki, $tnid) . "' "
             . "AND id = '" . ciniki_core_dbQuote($ciniki, $args['object_id']) . "' "
             . "";
         $rc = ciniki_core_dbHashQuery($ciniki, $strsql, 'ciniki.artistprofiles', 'item');

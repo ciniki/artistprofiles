@@ -16,7 +16,7 @@ function ciniki_artistprofiles_linkUpdate(&$ciniki) {
     //
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'prepareArgs');
     $rc = ciniki_core_prepareArgs($ciniki, 'no', array(
-        'business_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Business'),
+        'tnid'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Tenant'),
         'link_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Link'),
         'artist_id'=>array('required'=>'no', 'blank'=>'no', 'name'=>'Artist'),
         'name'=>array('required'=>'no', 'blank'=>'no', 'name'=>'Name'),
@@ -30,10 +30,10 @@ function ciniki_artistprofiles_linkUpdate(&$ciniki) {
 
     //
     // Make sure this module is activated, and
-    // check permission to run this function for this business
+    // check permission to run this function for this tenant
     //
     ciniki_core_loadMethod($ciniki, 'ciniki', 'artistprofiles', 'private', 'checkAccess');
-    $rc = ciniki_artistprofiles_checkAccess($ciniki, $args['business_id'], 'ciniki.artistprofiles.linkUpdate');
+    $rc = ciniki_artistprofiles_checkAccess($ciniki, $args['tnid'], 'ciniki.artistprofiles.linkUpdate');
     if( $rc['stat'] != 'ok' ) {
         return $rc;
     }
@@ -43,7 +43,7 @@ function ciniki_artistprofiles_linkUpdate(&$ciniki) {
     //
     if( isset($args['url']) ) {
         ciniki_core_loadMethod($ciniki, 'ciniki', 'artistprofiles', 'private', 'linkType');
-        $rc = ciniki_artistprofiles_linkType($ciniki, $args['business_id'], $args['url']);
+        $rc = ciniki_artistprofiles_linkType($ciniki, $args['tnid'], $args['url']);
         if( $rc['stat'] != 'ok' ) {
             return $rc;
         }
@@ -66,7 +66,7 @@ function ciniki_artistprofiles_linkUpdate(&$ciniki) {
     // Update the Link in the database
     //
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'objectUpdate');
-    $rc = ciniki_core_objectUpdate($ciniki, $args['business_id'], 'ciniki.artistprofiles.link', $args['link_id'], $args, 0x04);
+    $rc = ciniki_core_objectUpdate($ciniki, $args['tnid'], 'ciniki.artistprofiles.link', $args['link_id'], $args, 0x04);
     if( $rc['stat'] != 'ok' ) {
         ciniki_core_dbTransactionRollback($ciniki, 'ciniki.artistprofiles');
         return $rc;
@@ -81,11 +81,11 @@ function ciniki_artistprofiles_linkUpdate(&$ciniki) {
     }
 
     //
-    // Update the last_change date in the business modules
+    // Update the last_change date in the tenant modules
     // Ignore the result, as we don't want to stop user updates if this fails.
     //
-    ciniki_core_loadMethod($ciniki, 'ciniki', 'businesses', 'private', 'updateModuleChangeDate');
-    ciniki_businesses_updateModuleChangeDate($ciniki, $args['business_id'], 'ciniki', 'artistprofiles');
+    ciniki_core_loadMethod($ciniki, 'ciniki', 'tenants', 'private', 'updateModuleChangeDate');
+    ciniki_tenants_updateModuleChangeDate($ciniki, $args['tnid'], 'ciniki', 'artistprofiles');
 
     return array('stat'=>'ok');
 }

@@ -11,7 +11,7 @@
 // Returns
 // -------
 //
-function ciniki_artistprofiles_artistLoad($ciniki, $business_id, $artist_id, $args) {
+function ciniki_artistprofiles_artistLoad($ciniki, $tnid, $artist_id, $args) {
 
 
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryTree');
@@ -35,7 +35,7 @@ function ciniki_artistprofiles_artistLoad($ciniki, $business_id, $artist_id, $ar
         . "ciniki_artistprofiles.setup_image_id, "
         . "ciniki_artistprofiles.setup_description "
         . "FROM ciniki_artistprofiles "
-        . "WHERE ciniki_artistprofiles.business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
+        . "WHERE ciniki_artistprofiles.tnid = '" . ciniki_core_dbQuote($ciniki, $tnid) . "' "
         . "";
     if( is_numeric($artist_id) ) {
         $strsql .= "AND ciniki_artistprofiles.id = '" . ciniki_core_dbQuote($ciniki, $artist_id) . "' ";
@@ -69,7 +69,7 @@ function ciniki_artistprofiles_artistLoad($ciniki, $business_id, $artist_id, $ar
     $strsql = "SELECT tag_type, tag_name "
         . "FROM ciniki_artistprofiles_tags "
         . "WHERE artist_id = '" . ciniki_core_dbQuote($ciniki, $artist_id) . "' "
-        . "AND business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
+        . "AND tnid = '" . ciniki_core_dbQuote($ciniki, $tnid) . "' "
         . "AND tag_type = 10 "
         . "ORDER BY tag_name "
         . "";
@@ -93,7 +93,7 @@ function ciniki_artistprofiles_artistLoad($ciniki, $business_id, $artist_id, $ar
             . "(flags&0xF0) AS type, "
             . "permalink, name AS title, flags, image_id, description "
             . "FROM ciniki_artistprofiles_images "
-            . "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
+            . "WHERE tnid = '" . ciniki_core_dbQuote($ciniki, $tnid) . "' "
             . "AND ciniki_artistprofiles_images.artist_id = '" . ciniki_core_dbQuote($ciniki, $artist_id) . "' "
             . "";
         $rc = ciniki_core_dbHashQueryArrayTree($ciniki, $strsql, 'ciniki.artistprofiles', array(
@@ -119,7 +119,7 @@ function ciniki_artistprofiles_artistLoad($ciniki, $business_id, $artist_id, $ar
             if( isset($artist['images']) ) {
                 foreach($artist['images'] as $img_id => $img) {
                     if( isset($img['image_id']) && $img['image_id'] > 0 ) {
-                        $rc = ciniki_images_loadCacheThumbnail($ciniki, $business_id, $img['image_id'], 75);
+                        $rc = ciniki_images_loadCacheThumbnail($ciniki, $tnid, $img['image_id'], 75);
                         if( $rc['stat'] != 'ok' ) {
                             return $rc;
                         }
@@ -130,7 +130,7 @@ function ciniki_artistprofiles_artistLoad($ciniki, $business_id, $artist_id, $ar
             if( isset($artist['setupimages']) ) {
                 foreach($artist['setupimages'] as $img_id => $img) {
                     if( isset($img['image_id']) && $img['image_id'] > 0 ) {
-                        $rc = ciniki_images_loadCacheThumbnail($ciniki, $business_id, $img['image_id'], 75);
+                        $rc = ciniki_images_loadCacheThumbnail($ciniki, $tnid, $img['image_id'], 75);
                         if( $rc['stat'] != 'ok' ) {
                             return $rc;
                         }
@@ -148,7 +148,7 @@ function ciniki_artistprofiles_artistLoad($ciniki, $business_id, $artist_id, $ar
         $strsql = "SELECT id, name, permalink, sequence, flags, "
             . "mp3_audio_id, wav_audio_id, ogg_audio_id, description "
             . "FROM ciniki_artistprofiles_audio "
-            . "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
+            . "WHERE tnid = '" . ciniki_core_dbQuote($ciniki, $tnid) . "' "
             . "AND artist_id = '" . ciniki_core_dbQuote($ciniki, $artist_id) . "' "
             . "";
         $rc = ciniki_core_dbHashQueryArrayTree($ciniki, $strsql, 'ciniki.artistprofiles', array(
@@ -170,7 +170,7 @@ function ciniki_artistprofiles_artistLoad($ciniki, $business_id, $artist_id, $ar
     if( isset($args['videos']) && $args['videos'] == 'yes' ) {
         $strsql = "SELECT id, name, link_type, url, description "
             . "FROM ciniki_artistprofiles_links "
-            . "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
+            . "WHERE tnid = '" . ciniki_core_dbQuote($ciniki, $tnid) . "' "
             . "AND artist_id = '" . ciniki_core_dbQuote($ciniki, $artist_id) . "' "
             . "AND link_type >= 2000 AND link_type < 3000 "
             . "";
@@ -194,7 +194,7 @@ function ciniki_artistprofiles_artistLoad($ciniki, $business_id, $artist_id, $ar
     if( isset($args['links']) && $args['links'] == 'yes' ) {
         $strsql = "SELECT id, name, link_type, url, description "
             . "FROM ciniki_artistprofiles_links "
-            . "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
+            . "WHERE tnid = '" . ciniki_core_dbQuote($ciniki, $tnid) . "' "
             . "AND link_type < 2000 "
             . "AND artist_id = '" . ciniki_core_dbQuote($ciniki, $artist_id) . "' "
             . "";

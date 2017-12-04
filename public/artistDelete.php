@@ -8,7 +8,7 @@
 // ---------
 // api_key:
 // auth_token:
-// business_id:            The ID of the business the artist is attached to.
+// tnid:            The ID of the tenant the artist is attached to.
 // artist_id:            The ID of the artist to be removed.
 //
 // Returns
@@ -21,7 +21,7 @@ function ciniki_artistprofiles_artistDelete(&$ciniki) {
     //
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'prepareArgs');
     $rc = ciniki_core_prepareArgs($ciniki, 'no', array(
-        'business_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Business'),
+        'tnid'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Tenant'),
         'artist_id'=>array('required'=>'yes', 'blank'=>'yes', 'name'=>'Artist'),
         ));
     if( $rc['stat'] != 'ok' ) {
@@ -30,10 +30,10 @@ function ciniki_artistprofiles_artistDelete(&$ciniki) {
     $args = $rc['args'];
 
     //
-    // Check access to business_id as owner
+    // Check access to tnid as owner
     //
     ciniki_core_loadMethod($ciniki, 'ciniki', 'artistprofiles', 'private', 'checkAccess');
-    $rc = ciniki_artistprofiles_checkAccess($ciniki, $args['business_id'], 'ciniki.artistprofiles.artistDelete');
+    $rc = ciniki_artistprofiles_checkAccess($ciniki, $args['tnid'], 'ciniki.artistprofiles.artistDelete');
     if( $rc['stat'] != 'ok' ) {
         return $rc;
     }
@@ -43,7 +43,7 @@ function ciniki_artistprofiles_artistDelete(&$ciniki) {
     //
     $strsql = "SELECT id, uuid "
         . "FROM ciniki_artistprofiles "
-        . "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+        . "WHERE tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
         . "AND id = '" . ciniki_core_dbQuote($ciniki, $args['artist_id']) . "' "
         . "";
     $rc = ciniki_core_dbHashQuery($ciniki, $strsql, 'ciniki.artistprofiles', 'artist');
@@ -72,7 +72,7 @@ function ciniki_artistprofiles_artistDelete(&$ciniki) {
     //
     // Remove the artist
     //
-    $rc = ciniki_core_objectDelete($ciniki, $args['business_id'], 'ciniki.artistprofiles.artist',
+    $rc = ciniki_core_objectDelete($ciniki, $args['tnid'], 'ciniki.artistprofiles.artist',
         $args['artist_id'], $artist['uuid'], 0x04);
     if( $rc['stat'] != 'ok' ) {
         ciniki_core_dbTransactionRollback($ciniki, 'ciniki.artistprofiles');
@@ -82,9 +82,9 @@ function ciniki_artistprofiles_artistDelete(&$ciniki) {
     //
     // Remove any tags
     //
-    if( ($ciniki['business']['modules']['ciniki.artistprofiles']['flags']&0x10) > 0 ) {
+    if( ($ciniki['tenant']['modules']['ciniki.artistprofiles']['flags']&0x10) > 0 ) {
         ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'tagsDelete');
-        $rc = ciniki_core_tagsDelete($ciniki, 'ciniki.artistprofiles', 'tag', $args['business_id'],
+        $rc = ciniki_core_tagsDelete($ciniki, 'ciniki.artistprofiles', 'tag', $args['tnid'],
             'ciniki_artistprofiles_tags', 'ciniki_artistprofiles_history', 'artist_id', $args['artist_id']);
         if( $rc['stat'] != 'ok' ) {
             ciniki_core_dbTransactionRollback($ciniki, 'ciniki.artistprofiles');
@@ -101,17 +101,17 @@ function ciniki_artistprofiles_artistDelete(&$ciniki) {
     }
 
     //
-    // Update the last_change date in the business modules
+    // Update the last_change date in the tenant modules
     // Ignore the result, as we don't want to stop user updates if this fails.
     //
-    ciniki_core_loadMethod($ciniki, 'ciniki', 'businesses', 'private', 'updateModuleChangeDate');
-    ciniki_businesses_updateModuleChangeDate($ciniki, $args['business_id'], 'ciniki', 'artistprofiles');
+    ciniki_core_loadMethod($ciniki, 'ciniki', 'tenants', 'private', 'updateModuleChangeDate');
+    ciniki_tenants_updateModuleChangeDate($ciniki, $args['tnid'], 'ciniki', 'artistprofiles');
 
     //
     // Update the web index if enabled
     //
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'hookExec');
-    ciniki_core_hookExec($ciniki, $args['business_id'], 'ciniki', 'web', 'indexObject', array('object'=>'ciniki.artistprofiles.artist', 'object_id'=>$args['artist_id']));
+    ciniki_core_hookExec($ciniki, $args['tnid'], 'ciniki', 'web', 'indexObject', array('object'=>'ciniki.artistprofiles.artist', 'object_id'=>$args['artist_id']));
 
     return array('stat'=>'ok');
 }

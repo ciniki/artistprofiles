@@ -6,7 +6,7 @@
 // Arguments
 // ---------
 // ciniki:
-// business_id:         The business ID to check the session user against.
+// tnid:         The tenant ID to check the session user against.
 // method:              The requested method.
 //
 // Returns
@@ -16,7 +16,7 @@
 require_once($ciniki['config']['ciniki.core']['lib_dir'] . '/dropbox/lib/Dropbox/autoload.php');
 use \Dropbox as dbx;
 
-function ciniki_artistprofiles_dropboxDownload(&$ciniki, $business_id) {
+function ciniki_artistprofiles_dropboxDownload(&$ciniki, $tnid) {
 
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbQuote');
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbUUID');
@@ -37,10 +37,10 @@ function ciniki_artistprofiles_dropboxDownload(&$ciniki, $business_id) {
     ciniki_core_loadMethod($ciniki, 'ciniki', 'artistprofiles', 'private', 'dropboxDownloadLinks');
 
     //
-    // Check to make sure the dropbox flag is enabled for this business
+    // Check to make sure the dropbox flag is enabled for this tenant
     //
-    if( !isset($ciniki['business']['modules']['ciniki.artistprofiles']['flags'])
-        || ($ciniki['business']['modules']['ciniki.artistprofiles']['flags']&0x01) == 0 ) {
+    if( !isset($ciniki['tenant']['modules']['ciniki.artistprofiles']['flags'])
+        || ($ciniki['tenant']['modules']['ciniki.artistprofiles']['flags']&0x01) == 0 ) {
         return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.artistprofiles.11', 'msg'=>'Dropbox integration not enabled'));
     }
 
@@ -49,7 +49,7 @@ function ciniki_artistprofiles_dropboxDownload(&$ciniki, $business_id) {
     //
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbDetailsQueryDash');
     $rc = ciniki_core_dbDetailsQueryDash($ciniki, 'ciniki_artistprofiles_settings', 
-        'business_id', $business_id, 'ciniki.artistprofiles', 'settings', '');
+        'tnid', $tnid, 'ciniki.artistprofiles', 'settings', '');
     if( $rc['stat'] != 'ok' ) {
         return $rc;
     }
@@ -79,8 +79,8 @@ function ciniki_artistprofiles_dropboxDownload(&$ciniki, $business_id) {
     // Get the settings for dropbox
     //
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbDetailsQueryDash');
-    $rc = ciniki_core_dbDetailsQueryDash($ciniki, 'ciniki_business_details', 
-        'business_id', $business_id, 'ciniki.businesses', 'settings', 'apis');
+    $rc = ciniki_core_dbDetailsQueryDash($ciniki, 'ciniki_tenant_details', 
+        'tnid', $tnid, 'ciniki.tenants', 'settings', 'apis');
     if( $rc['stat'] != 'ok' ) {
         return $rc;
     }
@@ -222,7 +222,7 @@ function ciniki_artistprofiles_dropboxDownload(&$ciniki, $business_id) {
         $permalink = ciniki_core_makePermalink($ciniki, $sort_name);
         $strsql = "SELECT id "
             . "FROM ciniki_artistprofiles "
-            . "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
+            . "WHERE tnid = '" . ciniki_core_dbQuote($ciniki, $tnid) . "' "
             . "AND permalink = '" . ciniki_core_dbQuote($ciniki, $permalink) . "' "
             . "";
         $rc = ciniki_core_dbHashQuery($ciniki, $strsql, 'ciniki.artistprofiles', 'artist');
@@ -240,7 +240,7 @@ function ciniki_artistprofiles_dropboxDownload(&$ciniki, $business_id) {
             //
             $strsql = "SELECT id, name "
                 . "FROM ciniki_artistprofiles "
-                . "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
+                . "WHERE tnid = '" . ciniki_core_dbQuote($ciniki, $tnid) . "' "
                 . "AND permalink = '" . ciniki_core_dbQuote($ciniki, $permalink) . "' "
                 . "";
             $rc = ciniki_core_dbHashQuery($ciniki, $strsql, 'ciniki.artistprofiles', 'item');
@@ -256,7 +256,7 @@ function ciniki_artistprofiles_dropboxDownload(&$ciniki, $business_id) {
             // 
             // Add the artist
             //
-            $rc = ciniki_core_objectAdd($ciniki, $business_id, 'ciniki.artistprofiles.artist', array(
+            $rc = ciniki_core_objectAdd($ciniki, $tnid, 'ciniki.artistprofiles.artist', array(
                 'name'=>$sort_name,
                 'sort_name'=>$sort_name,
                 'permalink'=>$permalink, 
@@ -296,7 +296,7 @@ function ciniki_artistprofiles_dropboxDownload(&$ciniki, $business_id) {
         else {
             $artist_id = $rc['artist']['id'];
             ciniki_core_loadMethod($ciniki, 'ciniki', 'artistprofiles', 'private', 'artistLoad');
-            $rc = ciniki_artistprofiles_artistLoad($ciniki, $business_id, $artist_id, array('images'=>'yes', 'audio'=>'yes', 'links'=>'yes', 'videos'=>'yes'));
+            $rc = ciniki_artistprofiles_artistLoad($ciniki, $tnid, $artist_id, array('images'=>'yes', 'audio'=>'yes', 'links'=>'yes', 'videos'=>'yes'));
             if( $rc['stat'] != 'ok' ) {
                 ciniki_core_dbTransactionRollback($ciniki, 'ciniki.artistprofiles');
                 return $rc;
@@ -316,14 +316,14 @@ function ciniki_artistprofiles_dropboxDownload(&$ciniki, $business_id) {
             if( $field == 'info' ) {
                 $content = '';
                 if( $details['mime_type'] == 'text/plain' ) {
-                    $rc = ciniki_core_dropboxOpenTXT($ciniki, $business_id, $client, $details['path']);
+                    $rc = ciniki_core_dropboxOpenTXT($ciniki, $tnid, $client, $details['path']);
                     if( $rc['stat'] != 'ok' ) {
                         ciniki_core_dbTransactionRollback($ciniki, 'ciniki.artistprofiles');
                         return $rc;
                     }
                     $content = $rc['content'];
                 } elseif( $details['mime_type'] == 'application/rtf' ) {
-                    $rc = ciniki_core_dropboxParseRTFToText($ciniki, $business_id, $client, $details['path']);
+                    $rc = ciniki_core_dropboxParseRTFToText($ciniki, $tnid, $client, $details['path']);
                     if( $rc['stat'] != 'ok' ) {
                         ciniki_core_dbTransactionRollback($ciniki, 'ciniki.artistprofiles');
                         return $rc;
@@ -348,7 +348,7 @@ function ciniki_artistprofiles_dropboxDownload(&$ciniki, $business_id) {
             }
             elseif( $field == 'primary_image' && $details['mime_type'] == 'image/jpeg' ) {
                 print "image: " . $details['path'] . "\n";
-                $rc = ciniki_images_insertFromDropbox($ciniki, $business_id, $ciniki['session']['user']['id'], $client, $details['path'], 1, '', '', 'no');
+                $rc = ciniki_images_insertFromDropbox($ciniki, $tnid, $ciniki['session']['user']['id'], $client, $details['path'], 1, '', '', 'no');
                 if( $rc['stat'] != 'ok' && $rc['stat'] != 'exists' ) {
                     ciniki_core_dbTransactionRollback($ciniki, 'ciniki.artistprofiles');
                     return $rc;
@@ -359,7 +359,7 @@ function ciniki_artistprofiles_dropboxDownload(&$ciniki, $business_id) {
             }
             elseif( $field == 'primary_image_caption' && $details['mime_type'] == 'text/plain' ) {
                 print "image_caption: " . $details['path'] . "\n";
-                $rc = ciniki_core_dropboxOpenTXT($ciniki, $business_id, $client, $details['path']);
+                $rc = ciniki_core_dropboxOpenTXT($ciniki, $tnid, $client, $details['path']);
                 if( $rc['stat'] != 'ok' ) {
                     ciniki_core_dbTransactionRollback($ciniki, 'ciniki.artistprofiles');
                     return $rc;
@@ -377,7 +377,7 @@ function ciniki_artistprofiles_dropboxDownload(&$ciniki, $business_id) {
                 }
             }
             elseif( $field == 'setup_image' && $details['mime_type'] == 'image/jpeg' ) {
-                $rc = ciniki_images_insertFromDropbox($ciniki, $business_id, $ciniki['session']['user']['id'], $client, $details['path'], 1, '', '', 'no');
+                $rc = ciniki_images_insertFromDropbox($ciniki, $tnid, $ciniki['session']['user']['id'], $client, $details['path'], 1, '', '', 'no');
                 if( $rc['stat'] != 'ok' && $rc['stat'] != 'exists' ) {
                     ciniki_core_dbTransactionRollback($ciniki, 'ciniki.artistprofiles');
                     return $rc;
@@ -387,7 +387,7 @@ function ciniki_artistprofiles_dropboxDownload(&$ciniki, $business_id) {
                 }
             }
             elseif( ($field == 'synopsis' || $field == 'description' || $field == 'setup_description' ) && $details['mime_type'] == 'application/rtf' ) {
-                $rc = ciniki_core_dropboxParseRTFToText($ciniki, $business_id, $client, $details['path']);
+                $rc = ciniki_core_dropboxParseRTFToText($ciniki, $tnid, $client, $details['path']);
                 if( $rc['stat'] != 'ok' ) {
                     ciniki_core_dbTransactionRollback($ciniki, 'ciniki.artistprofiles');
                     return $rc;
@@ -397,7 +397,7 @@ function ciniki_artistprofiles_dropboxDownload(&$ciniki, $business_id) {
                 }
             }
             elseif( ($field == 'synopsis' || $field == 'description' || $field == 'setup_description' ) && $details['mime_type'] == 'text/plain' ) {
-                $rc = ciniki_core_dropboxOpenTXT($ciniki, $business_id, $client, $details['path']);
+                $rc = ciniki_core_dropboxOpenTXT($ciniki, $tnid, $client, $details['path']);
                 if( $rc['stat'] != 'ok' ) {
                     ciniki_core_dbTransactionRollback($ciniki, 'ciniki.artistprofiles');
                     return $rc;
@@ -407,14 +407,14 @@ function ciniki_artistprofiles_dropboxDownload(&$ciniki, $business_id) {
                 }
             }
             elseif( $field == 'images' || $field == 'setupimages' ) {
-                $rc = ciniki_artistprofiles_dropboxDownloadImages($ciniki, $business_id, $client, $ciniki_artist, $details);
+                $rc = ciniki_artistprofiles_dropboxDownloadImages($ciniki, $tnid, $client, $ciniki_artist, $details);
                 if( $rc['stat'] != 'ok' ) {
                     ciniki_core_dbTransactionRollback($ciniki, 'ciniki.artistprofiles');
                     return $rc;
                 }
             }
             elseif( $field == 'links' ) {
-                $rc = ciniki_artistprofiles_dropboxDownloadLinks($ciniki, $business_id, $client, $ciniki_artist, $details);
+                $rc = ciniki_artistprofiles_dropboxDownloadLinks($ciniki, $tnid, $client, $ciniki_artist, $details);
                 if( $rc['stat'] != 'ok' ) {
                     ciniki_core_dbTransactionRollback($ciniki, 'ciniki.artistprofiles');
                     return $rc;
@@ -427,7 +427,7 @@ function ciniki_artistprofiles_dropboxDownload(&$ciniki, $business_id) {
         //
         if( !in_array($artist['category'], $ciniki_artist['categories']) ) {
             $permalink = ciniki_core_makePermalink($ciniki, $artist['category']);
-            $rc = ciniki_core_objectAdd($ciniki, $business_id, 'ciniki.artistprofiles.tag', array(
+            $rc = ciniki_core_objectAdd($ciniki, $tnid, 'ciniki.artistprofiles.tag', array(
                 'artist_id'=>$artist_id,
                 'tag_type'=>10,
                 'tag_name'=>$artist['category'],
@@ -442,7 +442,7 @@ function ciniki_artistprofiles_dropboxDownload(&$ciniki, $business_id) {
         // Update the artist
         //
         if( count($update_args) > 0 ) {
-            $rc = ciniki_core_objectUpdate($ciniki, $business_id, 'ciniki.artistprofiles.artist', $artist_id, $update_args, 0x04);
+            $rc = ciniki_core_objectUpdate($ciniki, $tnid, 'ciniki.artistprofiles.artist', $artist_id, $update_args, 0x04);
             if( $rc['stat'] != 'ok' ) {
                 ciniki_core_dbTransactionRollback($ciniki, 'ciniki.artistprofiles');
                 return $rc;
@@ -453,7 +453,7 @@ function ciniki_artistprofiles_dropboxDownload(&$ciniki, $business_id) {
         // Update the web index if enabled
         //
         ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'hookExec');
-        ciniki_core_hookExec($ciniki, $business_id, 'ciniki', 'web', 'indexObject', array('object'=>'ciniki.artistprofiles.artist', 'object_id'=>$artist_id));
+        ciniki_core_hookExec($ciniki, $tnid, 'ciniki', 'web', 'indexObject', array('object'=>'ciniki.artistprofiles.artist', 'object_id'=>$artist_id));
 
         //  
         // Commit the changes
@@ -467,8 +467,8 @@ function ciniki_artistprofiles_dropboxDownload(&$ciniki, $business_id) {
     //
     // Update the dropbox cursor
     //
-    $strsql = "INSERT INTO ciniki_artistprofiles_settings (business_id, detail_key, detail_value, date_added, last_updated) "
-        . "VALUES ('" . ciniki_core_dbQuote($ciniki, $business_id) . "'"
+    $strsql = "INSERT INTO ciniki_artistprofiles_settings (tnid, detail_key, detail_value, date_added, last_updated) "
+        . "VALUES ('" . ciniki_core_dbQuote($ciniki, $tnid) . "'"
         . ", '" . ciniki_core_dbQuote($ciniki, 'dropbox-cursor') . "'"
         . ", '" . ciniki_core_dbQuote($ciniki, $new_dropbox_cursor) . "'"
         . ", UTC_TIMESTAMP(), UTC_TIMESTAMP()) "
@@ -480,7 +480,7 @@ function ciniki_artistprofiles_dropboxDownload(&$ciniki, $business_id) {
         ciniki_core_dbTransactionRollback($ciniki, 'ciniki.artistprofiles');
         return $rc;
     }
-    ciniki_core_dbAddModuleHistory($ciniki, 'ciniki.artistprofiles', 'ciniki_artistprofiles_history', $business_id, 
+    ciniki_core_dbAddModuleHistory($ciniki, 'ciniki.artistprofiles', 'ciniki_artistprofiles_history', $tnid, 
         2, 'ciniki_artistprofiles_settings', 'dropbox-cursor', 'detail_value', $new_dropbox_cursor);
     $ciniki['syncqueue'][] = array('push'=>'ciniki.artistprofiles.setting', 
         'args'=>array('id'=>'dropbox-cursor'));

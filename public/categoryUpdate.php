@@ -16,7 +16,7 @@ function ciniki_artistprofiles_categoryUpdate(&$ciniki) {
     //  
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'prepareArgs');
     $rc = ciniki_core_prepareArgs($ciniki, 'no', array(
-        'business_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Business'), 
+        'tnid'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Tenant'), 
         'category'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Category'),
         'title'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Title'),
         'sequence'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Sequence'),
@@ -30,20 +30,20 @@ function ciniki_artistprofiles_categoryUpdate(&$ciniki) {
     
     //  
     // Make sure this module is activated, and
-    // check permission to run this function for this business
+    // check permission to run this function for this tenant
     //  
     ciniki_core_loadMethod($ciniki, 'ciniki', 'artistprofiles', 'private', 'checkAccess');
-    $rc = ciniki_artistprofiles_checkAccess($ciniki, $args['business_id'], 'ciniki.artistprofiles.categoryUpdate'); 
+    $rc = ciniki_artistprofiles_checkAccess($ciniki, $args['tnid'], 'ciniki.artistprofiles.categoryUpdate'); 
     if( $rc['stat'] != 'ok' ) { 
         return $rc;
     }   
 
     //
-    // Grab the settings for the business from the database
+    // Grab the settings for the tenant from the database
     //
     $strsql = "SELECT detail_key, detail_value "
         . "FROM ciniki_artistprofiles_settings "
-        . "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+        . "WHERE tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
         . "AND detail_key LIKE 'tag-category-%-" . ciniki_core_dbQuote($ciniki, $args['category']) . "' "
         . "";
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbQueryList2');
@@ -100,15 +100,15 @@ function ciniki_artistprofiles_categoryUpdate(&$ciniki) {
                         ciniki_core_dbTransactionRollback($ciniki, 'ciniki.artistprofiles');
                         return $rc;
                     }
-                    ciniki_core_dbAddModuleHistory($ciniki, 'ciniki.artistprofiles', 'ciniki_artistprofiles_history', $args['business_id'], 
+                    ciniki_core_dbAddModuleHistory($ciniki, 'ciniki.artistprofiles', 'ciniki_artistprofiles_history', $args['tnid'], 
                         2, 'ciniki_artistprofiles_settings', 'tag-category-' . $field . '-' . $args['category'], 'detail_value', $args[$field]);
                     $ciniki['syncqueue'][] = array('push'=>'ciniki.artistprofiles.setting', 
                         'args'=>array('id'=>'tag-category-' . $field . '-' . $args['category']));
                 }
             } else {
                 // Add the setting
-                $strsql = "INSERT INTO ciniki_artistprofiles_settings (business_id, detail_key, detail_value, date_added, last_updated) "
-                    . "VALUES ('" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "'"
+                $strsql = "INSERT INTO ciniki_artistprofiles_settings (tnid, detail_key, detail_value, date_added, last_updated) "
+                    . "VALUES ('" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "'"
                     . ", 'tag-category-" . ciniki_core_dbQuote($ciniki, $field . '-' . $args['category']) . "' "
                     . ", '" . ciniki_core_dbQuote($ciniki, $args[$field]) . "'"
                     . ", UTC_TIMESTAMP(), UTC_TIMESTAMP()) ";
@@ -117,7 +117,7 @@ function ciniki_artistprofiles_categoryUpdate(&$ciniki) {
                     ciniki_core_dbTransactionRollback($ciniki, 'ciniki.artistprofiles');
                     return $rc;
                 }
-                ciniki_core_dbAddModuleHistory($ciniki, 'ciniki.artistprofiles', 'ciniki_artistprofiles_history', $args['business_id'], 
+                ciniki_core_dbAddModuleHistory($ciniki, 'ciniki.artistprofiles', 'ciniki_artistprofiles_history', $args['tnid'], 
                     1, 'ciniki_artistprofiles_settings', 'tag-category-' . $field . '-' . $args['category'], 'detail_value', $args[$field]);
                 $ciniki['syncqueue'][] = array('push'=>'ciniki.artistprofiles.setting', 
                     'args'=>array('id'=>'tag-category-' . $field . '-' . $args['category']));
@@ -134,11 +134,11 @@ function ciniki_artistprofiles_categoryUpdate(&$ciniki) {
     }
 
     //
-    // Update the last_change date in the business modules
+    // Update the last_change date in the tenant modules
     // Ignore the result, as we don't want to stop user updates if this fails.
     //
-    ciniki_core_loadMethod($ciniki, 'ciniki', 'businesses', 'private', 'updateModuleChangeDate');
-    ciniki_businesses_updateModuleChangeDate($ciniki, $args['business_id'], 'ciniki', 'artistprofiles');
+    ciniki_core_loadMethod($ciniki, 'ciniki', 'tenants', 'private', 'updateModuleChangeDate');
+    ciniki_tenants_updateModuleChangeDate($ciniki, $args['tnid'], 'ciniki', 'artistprofiles');
 
     return array('stat'=>'ok');
 }

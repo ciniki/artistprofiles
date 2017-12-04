@@ -6,7 +6,7 @@
 // Arguments
 // ---------
 // ciniki:
-// business_id:         The business ID to check the session user against.
+// tnid:         The tenant ID to check the session user against.
 // method:              The requested method.
 //
 // Returns
@@ -16,7 +16,7 @@
 //require_once($ciniki['config']['ciniki.core']['lib_dir'] . '/dropbox/lib/Dropbox/autoload.php');
 //use \Dropbox as dbx;
 
-function ciniki_artistprofiles_dropboxDownloadLinks(&$ciniki, $business_id, $client, $artist, $details) {
+function ciniki_artistprofiles_dropboxDownloadLinks(&$ciniki, $tnid, $client, $artist, $details) {
 
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dropboxOpenWebloc');
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'objectAdd');
@@ -29,7 +29,7 @@ function ciniki_artistprofiles_dropboxDownloadLinks(&$ciniki, $business_id, $cli
         $description = '';
         if( preg_match('/^.*\/([^\/]*)\.webloc$/', $link['filename'], $matches) ) {
             $name = $matches[1];
-            $rc = ciniki_core_dropboxOpenWebloc($ciniki, $business_id, $client, $link['path']);
+            $rc = ciniki_core_dropboxOpenWebloc($ciniki, $tnid, $client, $link['path']);
             if( $rc['stat'] != 'ok' ) {
                 ciniki_core_dbTransactionRollback($ciniki, 'ciniki.artistprofiles');
                 return $rc;
@@ -42,7 +42,7 @@ function ciniki_artistprofiles_dropboxDownloadLinks(&$ciniki, $business_id, $cli
             $found_link = null;
             
             $link_type = 1000;
-            $rc = ciniki_artistprofiles_linkType($ciniki, $business_id, $url);
+            $rc = ciniki_artistprofiles_linkType($ciniki, $tnid, $url);
             if( $rc['stat'] != 'ok' ) {
                 return $rc;
             }
@@ -65,7 +65,7 @@ function ciniki_artistprofiles_dropboxDownloadLinks(&$ciniki, $business_id, $cli
                 }
             }
             if( $found == 'no' ) {
-                $rc = ciniki_core_objectAdd($ciniki, $business_id, 'ciniki.artistprofiles.link', array(
+                $rc = ciniki_core_objectAdd($ciniki, $tnid, 'ciniki.artistprofiles.link', array(
                     'artist_id'=>$artist['id'],
                     'name'=>$name,
                     'link_type'=>$link_type,
@@ -85,7 +85,7 @@ function ciniki_artistprofiles_dropboxDownloadLinks(&$ciniki, $business_id, $cli
                     $update_args['name'] = $name;
                 }
                 if( count($update_args) > 0 ) {
-                    $rc = ciniki_core_objectUpdate($ciniki, $business_id, 'ciniki.artistprofiles.link', $found_link['id'], $update_args, 0x04);
+                    $rc = ciniki_core_objectUpdate($ciniki, $tnid, 'ciniki.artistprofiles.link', $found_link['id'], $update_args, 0x04);
                     if( $rc['stat'] != 'ok' ) {
                         ciniki_core_dbTransactionRollback($ciniki, 'ciniki.artistprofiles');
                         return $rc;

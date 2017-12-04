@@ -10,7 +10,7 @@
 // Returns
 // -------
 //
-function ciniki_artistprofiles_linkType($ciniki, $business_id, $url) {
+function ciniki_artistprofiles_linkType($ciniki, $tnid, $url) {
     $link_type = '1000';
 
     if( preg_match('/youtube.com.*watch/', $url) ) {

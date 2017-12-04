@@ -8,7 +8,7 @@
 // ---------
 // ciniki:
 // settings:        The web settings structure.
-// business_id:     The ID of the business to get events for.
+// tnid:     The ID of the tenant to get events for.
 //
 // args:            The possible arguments for posts
 //
@@ -16,9 +16,9 @@
 // Returns
 // -------
 //
-function ciniki_artistprofiles_web_subMenuItems(&$ciniki, $settings, $business_id, $args) {
+function ciniki_artistprofiles_web_subMenuItems(&$ciniki, $settings, $tnid, $args) {
     
-    if( !isset($ciniki['business']['modules']['ciniki.artistprofiles']) ) {
+    if( !isset($ciniki['tenant']['modules']['ciniki.artistprofiles']) ) {
         return array('stat'=>'404', 'err'=>array('code'=>'ciniki.artistprofiles.36', 'msg'=>"I'm sorry, the file you requested does not exist."));
     }
 
@@ -39,7 +39,7 @@ function ciniki_artistprofiles_web_subMenuItems(&$ciniki, $settings, $business_i
         // Load the settings for categories
         //
         ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbDetailsQueryDash');
-        $rc = ciniki_core_dbDetailsQueryDash($ciniki, 'ciniki_artistprofiles_settings', 'business_id', $business_id, 'ciniki.artistprofiles', 'settings', 'tag-category');
+        $rc = ciniki_core_dbDetailsQueryDash($ciniki, 'ciniki_artistprofiles_settings', 'tnid', $tnid, 'ciniki.artistprofiles', 'settings', 'tag-category');
         if( $rc['stat'] != 'ok' ) {
             return $rc;
         }
@@ -68,7 +68,7 @@ function ciniki_artistprofiles_web_subMenuItems(&$ciniki, $settings, $business_i
         //
         $strsql = "SELECT DISTINCT tag_name, permalink "
             . "FROM ciniki_artistprofiles_tags "
-            . "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
+            . "WHERE tnid = '" . ciniki_core_dbQuote($ciniki, $tnid) . "' "
             . "AND tag_type = 10 "
             . "";
         $rc = ciniki_core_dbHashQuery($ciniki, $strsql, 'ciniki.artistprofiles', 'category');

@@ -2,13 +2,13 @@
 //
 // Description
 // -----------
-// This method will return the list of Artists for a business.
+// This method will return the list of Artists for a tenant.
 //
 // Arguments
 // ---------
 // api_key:
 // auth_token:
-// business_id:        The ID of the business to get Artist for.
+// tnid:        The ID of the tenant to get Artist for.
 //
 // Returns
 // -------
@@ -19,7 +19,7 @@ function ciniki_artistprofiles_artistList($ciniki) {
     //
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'prepareArgs');
     $rc = ciniki_core_prepareArgs($ciniki, 'no', array(
-        'business_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Business'),
+        'tnid'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Tenant'),
         'category_permalink'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Category'),
         ));
     if( $rc['stat'] != 'ok' ) {
@@ -28,10 +28,10 @@ function ciniki_artistprofiles_artistList($ciniki) {
     $args = $rc['args'];
 
     //
-    // Check access to business_id as owner, or sys admin.
+    // Check access to tnid as owner, or sys admin.
     //
     ciniki_core_loadMethod($ciniki, 'ciniki', 'artistprofiles', 'private', 'checkAccess');
-    $rc = ciniki_artistprofiles_checkAccess($ciniki, $args['business_id'], 'ciniki.artistprofiles.artistList');
+    $rc = ciniki_artistprofiles_checkAccess($ciniki, $args['tnid'], 'ciniki.artistprofiles.artistList');
     if( $rc['stat'] != 'ok' ) {
         return $rc;
     }
@@ -50,7 +50,7 @@ function ciniki_artistprofiles_artistList($ciniki) {
                 . "ciniki_artistprofiles.status, "
                 . "ciniki_artistprofiles.flags "
                 . "FROM ciniki_artistprofiles "
-                . "WHERE ciniki_artistprofiles.business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+                . "WHERE ciniki_artistprofiles.tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
                 . "AND (flags&0x01) = 0x01 "
                 . "ORDER BY sort_name "
                 . "";
@@ -62,11 +62,11 @@ function ciniki_artistprofiles_artistList($ciniki) {
                 . "ciniki_artistprofiles.status, "
                 . "ciniki_artistprofiles.flags "
                 . "FROM ciniki_artistprofiles_tags, ciniki_artistprofiles "
-                . "WHERE ciniki_artistprofiles_tags.business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+                . "WHERE ciniki_artistprofiles_tags.tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
                 . "AND ciniki_artistprofiles_tags.tag_type = 10 "
                 . "AND ciniki_artistprofiles_tags.permalink = '" . ciniki_core_dbQuote($ciniki, $args['category_permalink']) . "' "
                 . "AND ciniki_artistprofiles_tags.artist_id = ciniki_artistprofiles.id "
-                . "AND ciniki_artistprofiles.business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+                . "AND ciniki_artistprofiles.tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
                 . "ORDER BY sort_name "
                 . "";
         }
@@ -78,7 +78,7 @@ function ciniki_artistprofiles_artistList($ciniki) {
             . "ciniki_artistprofiles.status, "
             . "ciniki_artistprofiles.flags "
             . "FROM ciniki_artistprofiles "
-            . "WHERE ciniki_artistprofiles.business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+            . "WHERE ciniki_artistprofiles.tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
             . "ORDER BY sort_name "
             . "";
     }
@@ -103,7 +103,7 @@ function ciniki_artistprofiles_artistList($ciniki) {
     //
     if( ciniki_core_checkModuleFlags($ciniki, 'ciniki.artistprofiles', 0x0100) ) {
         ciniki_core_loadMethod($ciniki, 'ciniki', 'artistprofiles', 'web', 'subMenuItems');
-        $rc = ciniki_artistprofiles_web_subMenuItems($ciniki, array(), $args['business_id'], array());
+        $rc = ciniki_artistprofiles_web_subMenuItems($ciniki, array(), $args['tnid'], array());
         if( $rc['stat'] != 'ok' ) {
             return $rc;
         }

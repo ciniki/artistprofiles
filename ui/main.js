@@ -1,5 +1,5 @@
 //
-// This app will handle the listing, additions and deletions of artistprofiles.  These are associated business.
+// This app will handle the listing, additions and deletions of artistprofiles.  These are associated tenant.
 //
 function ciniki_artistprofiles_main() {
     //
@@ -34,7 +34,7 @@ function ciniki_artistprofiles_main() {
         this.menu.noData = function(s) { return this.sections[s].noData; }
         this.menu.liveSearchCb = function(s, i, value) {
             if( s == 'search' && value != '' ) {
-                M.api.getJSONBgCb('ciniki.artistprofiles.artistSearch', {'business_id':M.curBusinessID, 'start_needle':value, 'limit':'10'}, 
+                M.api.getJSONBgCb('ciniki.artistprofiles.artistSearch', {'tnid':M.curTenantID, 'start_needle':value, 'limit':'10'}, 
                     function(rsp) { 
                         M.ciniki_artistprofiles_main.menu.liveSearchShow('search', null, M.gE(M.ciniki_artistprofiles_main.menu.panelUID + '_' + s), rsp.artists); 
                     });
@@ -193,7 +193,7 @@ function ciniki_artistprofiles_main() {
             };  
         this.edit.fieldValue = function(s, i, d) { return this.data[i]; }
         this.edit.fieldHistoryArgs = function(s, i) {
-            return {'method':'ciniki.artistprofiles.artistHistory', 'args':{'business_id':M.curBusinessID, 
+            return {'method':'ciniki.artistprofiles.artistHistory', 'args':{'tnid':M.curTenantID, 
                 'artist_id':this.artist_id, 'field':i}};
         }
         this.edit.addDropImage = function(iid) {
@@ -232,7 +232,7 @@ function ciniki_artistprofiles_main() {
             };  
         this.categoryedit.fieldValue = function(s, i, d) { return this.data[i]; }
         this.categoryedit.fieldHistoryArgs = function(s, i) {
-            return {'method':'ciniki.artistprofiles.categoryHistory', 'args':{'business_id':M.curBusinessID, 
+            return {'method':'ciniki.artistprofiles.categoryHistory', 'args':{'tnid':M.curTenantID, 
                 'category':this.category, 'field':i}};
         }
         this.categoryedit.addDropImage = function(iid) {
@@ -266,10 +266,10 @@ function ciniki_artistprofiles_main() {
         } 
 
         this.menu.category = '';
-        if( (M.curBusiness.modules['ciniki.artistprofiles'].flags&0x0100) > 0 ) {
+        if( (M.curTenant.modules['ciniki.artistprofiles'].flags&0x0100) > 0 ) {
             this.menu.sections.categories.visible = 'yes';
             this.menu.size = 'medium narrowaside';
-            if( (M.curBusiness.modules['ciniki.artistprofiles'].flags&0x0200) > 0 ) {
+            if( (M.curTenant.modules['ciniki.artistprofiles'].flags&0x0200) > 0 ) {
                 this.menu.category = 'featured';
             }
         } else {
@@ -283,7 +283,7 @@ function ciniki_artistprofiles_main() {
     this.menuShow = function(cb, category) {
         this.menu.data = {};
         if( category != null ) { this.menu.category = category; }
-        M.api.getJSONCb('ciniki.artistprofiles.artistList', {'business_id':M.curBusinessID, 'category_permalink':this.menu.category}, function(rsp) {
+        M.api.getJSONCb('ciniki.artistprofiles.artistList', {'tnid':M.curTenantID, 'category_permalink':this.menu.category}, function(rsp) {
             if( rsp.stat != 'ok' ) {
                 M.api.err(rsp);
                 return false;
@@ -291,9 +291,9 @@ function ciniki_artistprofiles_main() {
             var p = M.ciniki_artistprofiles_main.menu;
             p.data = rsp;
             p.delButton('edit');
-            if( (M.curBusiness.modules['ciniki.artistprofiles'].flags&0x0100) > 0 ) {
+            if( (M.curTenant.modules['ciniki.artistprofiles'].flags&0x0100) > 0 ) {
                 p.addButton('edit', 'Edit', 'M.ciniki_artistprofiles_main.categoryEdit(\'M.ciniki_artistprofiles_main.menuShow();\',\'' + p.category + '\');');
-                if( (M.curBusiness.modules['ciniki.artistprofiles'].flags&0x0200) > 0 && p.category == 'featured' ) {
+                if( (M.curTenant.modules['ciniki.artistprofiles'].flags&0x0200) > 0 && p.category == 'featured' ) {
                     p.sections.artists.label = 'Featured';
                 } else {
                     for(var i in rsp.categories) {
@@ -310,7 +310,7 @@ function ciniki_artistprofiles_main() {
 
     this.artistShow = function(cb, sid) {
         if( sid != null ) { this.artist.artist_id = sid; }
-        var args = {'business_id':M.curBusinessID, 'artist_id':this.artist.artist_id, 'images':'yes', 'audio':'yes', 'links':'yes', 'videos':'yes'};
+        var args = {'tnid':M.curTenantID, 'artist_id':this.artist.artist_id, 'images':'yes', 'audio':'yes', 'links':'yes', 'videos':'yes'};
         M.api.getJSONCb('ciniki.artistprofiles.artistGet', args, function(rsp) {
             if( rsp.stat != 'ok' ) {
                 M.api.err(rsp);
@@ -327,7 +327,7 @@ function ciniki_artistprofiles_main() {
         this.edit.reset();
         if( aid != null ) { this.edit.artist_id = aid; }
         this.edit.sections._buttons.buttons.delete.visible = (this.edit.artist_id>0?'yes':'no');
-        M.api.getJSONCb('ciniki.artistprofiles.artistGet', {'business_id':M.curBusinessID, 'artist_id':this.edit.artist_id, 'categories':'yes'}, function(rsp) {
+        M.api.getJSONCb('ciniki.artistprofiles.artistGet', {'tnid':M.curTenantID, 'artist_id':this.edit.artist_id, 'categories':'yes'}, function(rsp) {
             if( rsp.stat != 'ok' ) {
                 M.api.err(rsp);
                 return false;
@@ -349,7 +349,7 @@ function ciniki_artistprofiles_main() {
         if( this.edit.artist_id > 0 ) {
             var c = this.edit.serializeForm('no');
             if( c != '' ) {
-                M.api.postJSONCb('ciniki.artistprofiles.artistUpdate', {'business_id':M.curBusinessID, 'artist_id':M.ciniki_artistprofiles_main.edit.artist_id}, c,
+                M.api.postJSONCb('ciniki.artistprofiles.artistUpdate', {'tnid':M.curTenantID, 'artist_id':M.ciniki_artistprofiles_main.edit.artist_id}, c,
                     function(rsp) {
                         if( rsp.stat != 'ok' ) {
                             M.api.err(rsp);
@@ -362,7 +362,7 @@ function ciniki_artistprofiles_main() {
             }
         } else {
             var c = this.edit.serializeForm('yes');
-            M.api.postJSONCb('ciniki.artistprofiles.artistAdd', {'business_id':M.curBusinessID}, c, function(rsp) {
+            M.api.postJSONCb('ciniki.artistprofiles.artistAdd', {'tnid':M.curTenantID}, c, function(rsp) {
                 if( rsp.stat != 'ok' ) {
                     M.api.err(rsp);
                     return false;
@@ -381,7 +381,7 @@ function ciniki_artistprofiles_main() {
     this.artistDelete = function() {
         if( confirm("Are you sure you want to remove '" + this.edit.data.name + "'?") ) {
             M.api.getJSONCb('ciniki.artistprofiles.artistDelete', 
-                {'business_id':M.curBusinessID, 'artist_id':M.ciniki_artistprofiles_main.edit.artist_id}, function(rsp) {
+                {'tnid':M.curTenantID, 'artist_id':M.ciniki_artistprofiles_main.edit.artist_id}, function(rsp) {
                     if( rsp.stat != 'ok' ) {
                         M.api.err(rsp);
                         return false;
@@ -394,7 +394,7 @@ function ciniki_artistprofiles_main() {
     this.categoryEdit = function(cb, cat) {
         this.categoryedit.reset();
         if( cat != null ) { this.categoryedit.category = cat; }
-        M.api.getJSONCb('ciniki.artistprofiles.categoryGet', {'business_id':M.curBusinessID, 'category':this.categoryedit.category}, function(rsp) {
+        M.api.getJSONCb('ciniki.artistprofiles.categoryGet', {'tnid':M.curTenantID, 'category':this.categoryedit.category}, function(rsp) {
             if( rsp.stat != 'ok' ) {
                 M.api.err(rsp);
                 return false;
@@ -409,7 +409,7 @@ function ciniki_artistprofiles_main() {
     this.categorySave = function() {
         var c = this.categoryedit.serializeForm('no');
         if( c != '' ) {
-            M.api.postJSONCb('ciniki.artistprofiles.categoryUpdate', {'business_id':M.curBusinessID, 'category':this.categoryedit.category}, c,
+            M.api.postJSONCb('ciniki.artistprofiles.categoryUpdate', {'tnid':M.curTenantID, 'category':this.categoryedit.category}, c,
                 function(rsp) {
                     if( rsp.stat != 'ok' ) {
                         M.api.err(rsp);

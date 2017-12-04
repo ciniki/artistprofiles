@@ -8,7 +8,7 @@
 // ---------
 // api_key:
 // auth_token:
-// business_id:         The ID of the business the artist is attached to.
+// tnid:         The ID of the tenant the artist is attached to.
 // artist_id:          The ID of the artist to get the details for.
 //
 // Returns
@@ -20,7 +20,7 @@ function ciniki_artistprofiles_artistGet($ciniki) {
     //
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'prepareArgs');
     $rc = ciniki_core_prepareArgs($ciniki, 'no', array(
-        'business_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Business'),
+        'tnid'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Tenant'),
         'artist_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Artist'),
         'images'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Images'),
         'links'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Links'),
@@ -35,19 +35,19 @@ function ciniki_artistprofiles_artistGet($ciniki) {
 
     //
     // Make sure this module is activated, and
-    // check permission to run this function for this business
+    // check permission to run this function for this tenant
     //
     ciniki_core_loadMethod($ciniki, 'ciniki', 'artistprofiles', 'private', 'checkAccess');
-    $rc = ciniki_artistprofiles_checkAccess($ciniki, $args['business_id'], 'ciniki.artistprofiles.artistGet');
+    $rc = ciniki_artistprofiles_checkAccess($ciniki, $args['tnid'], 'ciniki.artistprofiles.artistGet');
     if( $rc['stat'] != 'ok' ) {
         return $rc;
     }
 
     //
-    // Load business settings
+    // Load tenant settings
     //
-    ciniki_core_loadMethod($ciniki, 'ciniki', 'businesses', 'private', 'intlSettings');
-    $rc = ciniki_businesses_intlSettings($ciniki, $args['business_id']);
+    ciniki_core_loadMethod($ciniki, 'ciniki', 'tenants', 'private', 'intlSettings');
+    $rc = ciniki_tenants_intlSettings($ciniki, $args['tnid']);
     if( $rc['stat'] != 'ok' ) {
         return $rc;
     }
@@ -110,7 +110,7 @@ function ciniki_artistprofiles_artistGet($ciniki) {
             . "ciniki_artistprofiles.setup_image_caption, "
             . "ciniki_artistprofiles.setup_description "
             . "FROM ciniki_artistprofiles "
-            . "WHERE ciniki_artistprofiles.business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+            . "WHERE ciniki_artistprofiles.tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
             . "AND ciniki_artistprofiles.id = '" . ciniki_core_dbQuote($ciniki, $args['artist_id']) . "' "
             . "";
         ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryTree');
@@ -139,7 +139,7 @@ function ciniki_artistprofiles_artistGet($ciniki) {
         $strsql = "SELECT tag_type, tag_name AS lists "
             . "FROM ciniki_artistprofiles_tags "
             . "WHERE artist_id = '" . ciniki_core_dbQuote($ciniki, $args['artist_id']) . "' "
-            . "AND business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+            . "AND tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
             . "ORDER BY tag_type, tag_name "
             . "";
         $rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.artistprofiles', array(
@@ -168,7 +168,7 @@ function ciniki_artistprofiles_artistGet($ciniki) {
                 . "description "
                 . "FROM ciniki_artistprofiles_images "
                 . "WHERE artist_id = '" . ciniki_core_dbQuote($ciniki, $args['artist_id']) . "' "
-                . "AND business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+                . "AND tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
                 . "";
             $rc = ciniki_core_dbHashQueryArrayTree($ciniki, $strsql, 'ciniki.artistprofiles', array(
                 array('container'=>'images', 'fname'=>'id', 
@@ -182,7 +182,7 @@ function ciniki_artistprofiles_artistGet($ciniki) {
                 $artist['images'] = $rc['images'];
                 foreach($artist['images'] as $img_id => $img) {
                     if( isset($img['image_id']) && $img['image_id'] > 0 ) {
-                        $rc = ciniki_images_loadCacheThumbnail($ciniki, $args['business_id'], $img['image_id'], 75);
+                        $rc = ciniki_images_loadCacheThumbnail($ciniki, $args['tnid'], $img['image_id'], 75);
                         if( $rc['stat'] != 'ok' ) {
                             return $rc;
                         }
@@ -200,7 +200,7 @@ function ciniki_artistprofiles_artistGet($ciniki) {
         if( isset($args['links']) && $args['links'] == 'yes' ) {
             $strsql = "SELECT id, name, link_type, url, description "
                 . "FROM ciniki_artistprofiles_links "
-                . "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+                . "WHERE tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
                 . "AND ciniki_artistprofiles_links.artist_id = '" . ciniki_core_dbQuote($ciniki, $args['artist_id']) . "' "
                 . "AND link_type >= 1000 AND link_type < 2000 "
                 . "";
@@ -224,7 +224,7 @@ function ciniki_artistprofiles_artistGet($ciniki) {
         if( isset($args['videos']) && $args['videos'] == 'yes' ) {
             $strsql = "SELECT id, name, link_type, url, description "
                 . "FROM ciniki_artistprofiles_links "
-                . "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+                . "WHERE tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
                 . "AND artist_id = '" . ciniki_core_dbQuote($ciniki, $args['artist_id']) . "' "
                 . "AND link_type >= 2000 AND link_type < 3000 "
                 . "";
@@ -249,14 +249,14 @@ function ciniki_artistprofiles_artistGet($ciniki) {
     // Check if all tags should be returned
     //
     $rsp['categories'] = array();
-    if( ($ciniki['business']['modules']['ciniki.artistprofiles']['flags']&0x0100) > 0
+    if( ($ciniki['tenant']['modules']['ciniki.artistprofiles']['flags']&0x0100) > 0
         && isset($args['categories']) && $args['categories'] == 'yes' 
         ) {
         //
         // Get the available tags
         //
         ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'tagsList');
-        $rc = ciniki_core_tagsList($ciniki, 'ciniki.artistprofiles', $args['business_id'], 'ciniki_artistprofiles_tags', 10);
+        $rc = ciniki_core_tagsList($ciniki, 'ciniki.artistprofiles', $args['tnid'], 'ciniki_artistprofiles_tags', 10);
         if( $rc['stat'] != 'ok' ) {
             return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.artistprofiles.20', 'msg'=>'Unable to get list of categories', 'err'=>$rc['err']));
         }

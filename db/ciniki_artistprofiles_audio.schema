@@ -9,7 +9,7 @@
 # ------
 # id:               The ID of the artistprofile audio.
 # uuid:             The Universal Unique ID.
-# business_id:      The ID of the business the artistprofile is attached to.
+# tnid:             The ID of the tenant the artistprofile is attached to.
 #
 # artist_id:        The ID of the artist profile from the ciniki_artistprofiles table.
 # 
@@ -38,7 +38,7 @@
 create table ciniki_artistprofiles_audio (
     id int not null auto_increment,
     uuid char(36) not null,
-    business_id int not null,
+    tnid int not null,
     artist_id int not null,
     name varchar(200) not null,
     permalink varchar(200) not null,
@@ -52,5 +52,5 @@ create table ciniki_artistprofiles_audio (
     last_updated datetime not null,
     primary key (id),
     index (artist_id, name),
-    index sync (business_id, uuid, last_updated)
+    index sync (tnid, uuid, last_updated)
 ) ENGINE='InnoDB', COMMENT='v1.01';

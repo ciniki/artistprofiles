@@ -7,12 +7,12 @@
 // Arguments
 // ---------
 // ciniki:
-// business_id:     The ID of the business to get events for.
+// tnid:     The ID of the tenant to get events for.
 //
 // Returns
 // -------
 //
-function ciniki_artistprofiles_hooks_linkcheckerList($ciniki, $business_id, $args) {
+function ciniki_artistprofiles_hooks_linkcheckerList($ciniki, $tnid, $args) {
 
     $objects = array();
 
@@ -24,7 +24,7 @@ function ciniki_artistprofiles_hooks_linkcheckerList($ciniki, $business_id, $arg
         . "id AS object_id, "
         . "url "
         . "FROM ciniki_artistprofiles_links "
-        . "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
+        . "WHERE tnid = '" . ciniki_core_dbQuote($ciniki, $tnid) . "' "
         . "";
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryIDTree');
     $rc = ciniki_core_dbHashQueryIDTree($ciniki, $strsql, 'ciniki.artistprofiles', array(
