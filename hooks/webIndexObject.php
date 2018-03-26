@@ -32,6 +32,24 @@ function ciniki_artistprofiles_hooks_webIndexObject($ciniki, $tnid, $args) {
     }
 
     if( $args['object'] == 'ciniki.artistprofiles.artist' ) {
+        //
+        // Get the category for the artist
+        //
+        $strsql = "SELECT tag_type, permalink "
+            . "FROM ciniki_artistprofiles_tags "
+            . "WHERE artist_id = '" . ciniki_core_dbQuote($ciniki, $args['object_id']) . "' "
+            . "AND tnid = '" . ciniki_core_dbQuote($ciniki, $tnid) . "' "
+            . "AND tag_type = 10 "
+            . "LIMIT 1 "
+            . "";
+        $rc = ciniki_core_dbHashQuery($ciniki, $strsql, 'ciniki.artistprofiles', 'item');
+        if( $rc['stat'] != 'ok' ) {
+            return $rc;
+        }
+        if( isset($rc['item']['permalink']) ) {
+            $category_permalink = $rc['item']['permalink'];
+        }
+
         $strsql = "SELECT id, name, subname, sort_name, permalink, status, "
             . "primary_image_id, synopsis, description "
             . "FROM ciniki_artistprofiles "
@@ -65,7 +83,9 @@ function ciniki_artistprofiles_hooks_webIndexObject($ciniki, $tnid, $args) {
             'secondary_words'=>$rc['item']['subname'] . ' ' . $rc['item']['synopsis'],
             'tertiary_words'=>$rc['item']['description'],
             'weight'=>20000,
-            'url'=>$base_url . '/' . $rc['item']['permalink']
+            'url'=>$base_url 
+                . (isset($category_permalink) ? '/' . $category_permalink : '')
+                . '/' . $rc['item']['permalink']
             );
         return array('stat'=>'ok', 'object'=>$object);
     }
