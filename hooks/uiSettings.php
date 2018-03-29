@@ -33,6 +33,18 @@ function ciniki_artistprofiles_hooks_uiSettings($ciniki, $tnid, $args) {
             'priority'=>3700,
             'label'=>'Artist Profiles', 
             'edit'=>array('app'=>'ciniki.artistprofiles.main'),
+            'add'=>array('app'=>'ciniki.artistprofiles.main', 'args'=>array('artist_id'=>0)),
+            'search'=>array(
+                'method'=>'ciniki.artistprofiles.artistSearch',
+                'args'=>array(),
+                'container'=>'artists',
+                'cols'=>1,
+                'cellValues'=>array(
+                    '0'=>'d.name;',
+                    ),
+                'noData'=>'No artists found',
+                'edit'=>array('method'=>'ciniki.artistprofiles.main', 'args'=>array('artist_id'=>'d.id;')),
+                ),
             );
         $rsp['menu_items'][] = $menu_item;
 
