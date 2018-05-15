@@ -15,6 +15,7 @@ function ciniki_artistprofiles_links() {
         this.edit.sections = {
             'link':{'label':'Link', 'fields':{
                 'name':{'label':'Name', 'hint':'', 'type':'text'},
+//                'sequence':{'label':'Order', 'hint':'', 'type':'text'},
                 'url':{'label':'URL', 'hint':'', 'type':'text'},
                 }},
             '_description':{'label':'Additional Information', 'fields':{

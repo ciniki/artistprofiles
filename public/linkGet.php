@@ -61,6 +61,7 @@ function ciniki_artistprofiles_linkGet($ciniki) {
             'artist_id'=>'',
             'name'=>'',
             'link_type'=>'1000',
+            'sequence'=>'1',
             'url'=>'',
             'description'=>'',
         );
@@ -74,6 +75,7 @@ function ciniki_artistprofiles_linkGet($ciniki) {
             . "ciniki_artistprofiles_links.artist_id, "
             . "ciniki_artistprofiles_links.name, "
             . "ciniki_artistprofiles_links.link_type, "
+            . "ciniki_artistprofiles_links.sequence, "
             . "ciniki_artistprofiles_links.url, "
             . "ciniki_artistprofiles_links.description "
             . "FROM ciniki_artistprofiles_links "

@@ -20,6 +20,7 @@ function ciniki_artistprofiles_linkUpdate(&$ciniki) {
         'link_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Link'),
         'artist_id'=>array('required'=>'no', 'blank'=>'no', 'name'=>'Artist'),
         'name'=>array('required'=>'no', 'blank'=>'no', 'name'=>'Name'),
+        'sequence'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Sequence'),
         'url'=>array('required'=>'no', 'blank'=>'no', 'name'=>'URL'),
         'description'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Description'),
         ));

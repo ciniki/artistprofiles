@@ -19,6 +19,8 @@
 #                       2001 - Video, vimeo
 #                       3000 - Audio, soundcloud **future**
 #
+# sequence:             The order to display the link in.
+#
 # name:                 The name for the link.
 # url:                  The url for the link.
 #
@@ -34,6 +36,7 @@ create table ciniki_artistprofiles_links (
     artist_id int not null,
     name varchar(150) not null,
     link_type smallint unsigned not null,
+    sequence tinyint unsigned not null,
     url varchar(255) not null,
     description varchar(6000) not null,
     date_added datetime not null,

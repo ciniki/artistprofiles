@@ -173,6 +173,7 @@ function ciniki_artistprofiles_artistLoad($ciniki, $tnid, $artist_id, $args) {
             . "WHERE tnid = '" . ciniki_core_dbQuote($ciniki, $tnid) . "' "
             . "AND artist_id = '" . ciniki_core_dbQuote($ciniki, $artist_id) . "' "
             . "AND link_type >= 2000 AND link_type < 3000 "
+            . "ORDER BY sequence "
             . "";
         $rc = ciniki_core_dbHashQueryArrayTree($ciniki, $strsql, 'ciniki.blog', array(
             array('container'=>'links', 'fname'=>'id',
@@ -197,6 +198,7 @@ function ciniki_artistprofiles_artistLoad($ciniki, $tnid, $artist_id, $args) {
             . "WHERE tnid = '" . ciniki_core_dbQuote($ciniki, $tnid) . "' "
             . "AND link_type < 2000 "
             . "AND artist_id = '" . ciniki_core_dbQuote($ciniki, $artist_id) . "' "
+            . "ORDER BY sequence "
             . "";
         $rc = ciniki_core_dbHashQueryArrayTree($ciniki, $strsql, 'ciniki.artistprofiles', array(
             array('container'=>'links', 'fname'=>'id', 

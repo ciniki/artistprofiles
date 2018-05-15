@@ -23,6 +23,7 @@ function ciniki_artistprofiles_linkAdd(&$ciniki) {
         'tnid'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Tenant'),
         'artist_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Artist'),
         'name'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Name'),
+        'sequence'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Sequence'),
         'url'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'URL'),
         'description'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Description'),
         ));

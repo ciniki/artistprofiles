@@ -80,6 +80,7 @@ function ciniki_artistprofiles_objects($ciniki) {
             'artist_id'=>array('name'=>'Artist', 'ref'=>'ciniki.artistprofiles.artist'),
             'name'=>array('name'=>'Name'),
             'link_type'=>array('name'=>'Type', 'default'=>'1000'),
+            'sequence'=>array('name'=>'Order', 'default'=>'1'),
             'url'=>array('name'=>'URL'),
             'description'=>array('name'=>'Description', 'default'=>''),
             ),
