@@ -130,6 +130,10 @@ function ciniki_artistprofiles_artistGet($ciniki) {
             return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.artistprofiles.19', 'msg'=>'Unable to find Artist'));
         }
         $artist = $rc['artists'][0]['artist'];
+        //
+        // Sometimes the encodings are messed up from dropbox
+        //
+        $artist['description'] = utf8_encode($artist['description']);
 
         ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryArrayTree');
 
