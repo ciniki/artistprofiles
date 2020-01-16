@@ -133,7 +133,7 @@ function ciniki_artistprofiles_artistGet($ciniki) {
         //
         // Sometimes the encodings are messed up from dropbox
         //
-        $artist['description'] = utf8_encode($artist['description']);
+        $artist['description'] = $artist['description'];
 
         ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryArrayTree');
 
