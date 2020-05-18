@@ -58,7 +58,7 @@ function ciniki_artistprofiles_images() {
         //
         var appContainer = M.createContainer(appPrefix, 'ciniki_artistprofiles_images', 'yes');
         if( appContainer == null ) {
-            alert('App Error');
+            M.alert('App Error');
             return false;
         }
 
@@ -133,15 +133,15 @@ function ciniki_artistprofiles_images() {
     };
 
     this.deleteImage = function() {
-        if( confirm('Are you sure you want to delete this image?') ) {
+        M.confirm('Are you sure you want to delete this image?',null,function() {
             var rsp = M.api.getJSONCb('ciniki.artistprofiles.imageDelete', {'tnid':M.curTenantID, 
-                'artist_image_id':this.edit.artist_image_id}, function(rsp) {
+                'artist_image_id':M.ciniki_artistprofiles_images.edit.artist_image_id}, function(rsp) {
                     if( rsp.stat != 'ok' ) {
                         M.api.err(rsp);
                         return false;
                     }
                     M.ciniki_artistprofiles_images.edit.close();
                 });
-        }
+        });
     };
 }

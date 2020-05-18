@@ -58,7 +58,7 @@ function ciniki_artistprofiles_settings() {
         //
         var appContainer = M.createContainer(appPrefix, 'ciniki_artistprofiles_settings', 'yes');
         if( appContainer == null ) {
-            alert('App Error');
+            M.alert('App Error');
             return false;
         } 
 

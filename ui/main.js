@@ -335,15 +335,15 @@ function ciniki_artistprofiles_main() {
         }
     }
     this.edit.remove = function() {
-        if( confirm("Are you sure you want to remove '" + this.data.name + "'?") ) {
-            M.api.getJSONCb('ciniki.artistprofiles.artistDelete', {'tnid':M.curTenantID, 'artist_id':this.artist_id}, function(rsp) {
+        M.confirm("Are you sure you want to remove '" + this.data.name + "'?",null,function() {
+            M.api.getJSONCb('ciniki.artistprofiles.artistDelete', {'tnid':M.curTenantID, 'artist_id':M.ciniki_artistprofiles_main.edit.artist_id}, function(rsp) {
                 if( rsp.stat != 'ok' ) {
                     M.api.err(rsp);
                     return false;
                 }
                 M.ciniki_artistprofiles_main.artist.close();
             });
-        }
+        });
     }
     this.edit.addButton('save', 'Save', 'M.ciniki_artistprofiles_main.edit.save();');
     this.edit.addClose('Cancel');
@@ -430,7 +430,7 @@ function ciniki_artistprofiles_main() {
         //
         var appContainer = M.createContainer(appPrefix, 'ciniki_artistprofiles_main', 'yes');
         if( appContainer == null ) {
-            alert('App Error');
+            M.alert('App Error');
             return false;
         } 
 
